@@ -34,8 +34,10 @@
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new">
-            <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название" autocomplete="off" required>
+            <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название" autocomplete="off" minlength="2" maxlength="30" required>
+            <div class="popup__input_error">Должно быть от 2 до 30 символов</div>
             <input type="url" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" autocomplete="off" required>
+            <div class="popup__input_error">Это обязательное поле</div>
             <button type="submit" name="submit" class="button popup__button" disabled>+</button>
         </form>
       </div>

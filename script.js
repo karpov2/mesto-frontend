@@ -165,31 +165,41 @@ function likeVsRemove(event) {
 function inputHandler(event) {
 	const popupName = event.currentTarget.elements.name,
 		  popupLink = event.currentTarget.elements.link,
-		  popupButton = event.currentTarget.elements.submit;
+		  popupButton = event.currentTarget.elements.submit,
+		  errorName = event.currentTarget.querySelector('.error');
 
     // Условие блокировки кнопки формы
     // Если поля пустые
 	if (popupName.value.lenght === 0 || popupLink.value.lenght === 0) {
         popupButton.setAttribute('disabled', true);
-        popupName.setCustomValidity('Пустое поле');
+        // popupName.setCustomValidity('Пустое поле');
 	} else {
         popupButton.removeAttribute('disabled');
-        popupName.setCustomValidity('');
+        // popupName.setCustomValidity('');
     }
 
     const specialSymbol = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '/', '§'];
     // Имя содержит только буквы
     // Проверяем, была ли введена цифра
     // Регулярные выражения еще не знаю
-    popupName.value.split('').forEach(function(item) {
-        if (!Number.isNaN(+item) || specialSymbol.includes(item)) {
-            popupButton.setAttribute('disabled', true);
-            popupName.setCustomValidity('Название не должно содержать цифр или спец. символов');
-        } else {
-            popupButton.removeAttribute('disabled');
-            popupName.setCustomValidity('');
-        }
-    });
+    // popupName.value.split('').forEach(function(item) {
+    //     if (!Number.isNaN(+item) || specialSymbol.includes(item)) {
+    //         popupButton.setAttribute('disabled', true);
+    //         popupName.setCustomValidity('Название не должно содержать цифр или спец. символов');
+    //     } else {
+    //         popupButton.removeAttribute('disabled');
+    //         popupName.setCustomValidity('');
+    //     }
+    // });
+    if (!popupName.validity.valid) {
+		popupButton.setAttribute('disabled', true);
+		errorName.textContent = 'popupName.validationMessage';
+		// popupName.setCustomValidity('Название не должно содержать цифр или спец. символов');
+	} else {
+		popupButton.removeAttribute('disabled');
+		errorName.textContent = '1';
+		// popupName.setCustomValidity('');
+	}
 
     const linkProtocol = ['https', 'http'];
     // Ссылка ничинаться с https/http
@@ -222,27 +232,3 @@ placesList.addEventListener('click', likeVsRemove);
 form.addEventListener('input', inputHandler);
 // Событие отправки формы
 form.addEventListener('submit', addList);
-
-/* В целом по работе:
-
-Отлично!
-
-    Весь функционал работает корректно
-    Код чистый и хорошо читается
-    Вы используете логические группировки операций
-    У вас нет дублирование кода
-    Вы не используете небезопасный innerHtml
-    Вы используете делегирование
-
-    Нужно исправить:
-
-    На placesList вешается два раза обработчик click, не нужно этого делать. Вызывайте одну функцию, а в ней определяйте
-    лайк это или удаление
-
-    Илья: испаравил
-
-    Можно лучше:
-
-    Валидируйте пользовательский ввод
-    Илья: сделал простую валидацию - без регулярных выражений
-*/
