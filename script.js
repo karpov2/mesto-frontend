@@ -218,6 +218,10 @@ function popUpForm(event) {
 	rootMasterContainer.querySelector('.popup')
 					   .classList.toggle('popup_is-opened');
 
+
+	// Сброс формы
+	form.reset();
+	
 	// Событие клика на кнопку - для закрытия формы
 	popupClose.addEventListener('click', popUpForm);
 	// Событие ввода в input - для условий формы
