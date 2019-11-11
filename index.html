@@ -20,8 +20,9 @@
         <div class="user-info__data">
           <h1 class="user-info__name">Илья Карпов</h1>
           <p class="user-info__job">Junior web-developer</p>
+          <button class="button user-info__edit">Edit</button>
         </div>
-        <button class="button user-info__button">+</button>
+        <button class="button user-info__add">+</button>
       </div>
     </div>
 
@@ -35,9 +36,9 @@
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new">
             <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название" autocomplete="off" minlength="2" maxlength="30" required>
-            <div class="popup__input_error">Должно быть от 2 до 30 символов</div>
-            <input type="url" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" autocomplete="off" required>
-            <div class="popup__input_error">Это обязательное поле</div>
+            <div class="popup__error popup__error_name"></div>
+            <input type="url" name="info" class="popup__input popup__input_type_info" placeholder="Ссылка на картинку" autocomplete="off" required>
+            <div class="popup__error popup__error_info"></div>
             <button type="submit" name="submit" class="button popup__button" disabled>+</button>
         </form>
       </div>

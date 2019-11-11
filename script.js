@@ -7,7 +7,9 @@ const rootMasterContainer = document.querySelector('.root'),
 	// Список карточек
 	placesList = rootMasterContainer.querySelector('.places-list'),
 	// Кнопка "+" открытия popup окна
-	infoButton = rootMasterContainer.querySelector('.user-info__button'),
+	userInfoAdd = rootMasterContainer.querySelector('.user-info__add'),
+	// Кнопка "Edit" открытия popup окна
+	userInfoEdit = rootMasterContainer.querySelector('.user-info__edit'),
 	// Крестик - закрытие popup окна
 	popupClose = rootMasterContainer.querySelector('.popup__close'),
 	// Форма
@@ -16,38 +18,31 @@ const rootMasterContainer = document.querySelector('.root'),
 const initialCards = [
 	{
 		name: 'Архыз',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
 	},
 	{
 		name: 'Челябинская область',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
 	},
 	{
 		name: 'Иваново',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
 	},
 	{
 		name: 'Камчатка',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
 	},
 	{
 		name: 'Холмогорский район',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
 	},
 	{
 		name: 'Байкал',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
 	},
 	{
 		name: 'Нургуш',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/khrebet-nurgush.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/khrebet-nurgush.jpg'
 	},
 	{
 		name: 'Тулиновка',
@@ -56,13 +51,11 @@ const initialCards = [
 	},
 	{
 		name: 'Остров Желтухина',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/zheltukhin-island.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/zheltukhin-island.jpg'
 	},
 	{
 		name: 'Владивосток',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/vladivostok.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/vladivostok.jpg'
 	}
 ];
 
@@ -82,7 +75,7 @@ function loadedAddList() {
 }
 
 // Создание новых карточек
-function createElementsList(nameValue, imgLink) {
+function createElementsList(nameValue, infoValue) {
 	// Создание родительского контейнера -> "place-card"
 	const placeCard = document.createElement('div');
 	// Создание блока для фона карточки -> "place-card__image"
@@ -98,7 +91,7 @@ function createElementsList(nameValue, imgLink) {
 
 	placeCard.classList.add('place-card');
 	placeCardImage.classList.add('place-card__image');
-	placeCardImage.style.backgroundImage = `url(${imgLink})`;
+	placeCardImage.style.backgroundImage = `url(${infoValue})`;
 	placeCardDeleteIcon.classList.add('place-card__delete-icon');
 	placeCardDescription.classList.add('place-card__description');
 	placeCardName.classList.add('place-card__name');
@@ -124,27 +117,113 @@ function createElementsList(nameValue, imgLink) {
 function addList(event) {
 	event.preventDefault();
 
-	// Имя в форме
-	let cardName = form.elements.name,
-		// Ссылка на картинку в форме
-		cardImage = form.elements.link;
+		// Имя в форме
+	let {name, info, submit} = form.elements;
 
 	// В блок placesList добавляем создданный div placeCard
-	placesList.appendChild(createElementsList(cardName.value, cardImage.value));
+	placesList.appendChild(createElementsList(name.value, info.value));
 
 	// Сброс формы
 	form.reset();
 	// Закрытие popup по срабатыванию
 	popUpForm();
 	// Снова блокируем кнопку формы
-	form.elements.submit.setAttribute('disabled', true);
+	submit.setAttribute('disabled', true);
 }
 
 // Открытие и закрытие popup
-function popUpForm() {
-	rootMasterContainer
-		.querySelector('.popup')
-		.classList.toggle('popup_is-opened');
+function popUpForm(event) {
+	const popUp = rootMasterContainer.querySelector('.popup');
+
+	// Условие: если popup открыт больше не заходить в эти условия
+	if (!popUp.classList.contains('popup_is-opened')) {
+		// Если нужно отредактировать профиль
+		if (event.target.textContent === 'Edit') {
+			console.log('Edit button');
+
+			const formEdit = {
+				title: 'Редактировать профиль',
+				name: {
+					placeholder: 'Имя'
+				},
+				info: {
+					placeholder: 'О себе',
+					type: 'text',
+					minlength: '2',
+					maxlength: '30'
+				},
+				button: {
+					name: 'Сохранить',
+					fontSize: 18
+				}
+			};
+
+			popUpFormContent(formEdit);
+
+		} 
+		
+		// Если нужно добавить новое место
+		if (event.target.textContent === '+') {
+			console.log('DDDD');
+			// console.dir(event.target);
+
+			const formAdd = {
+				title: 'Новое место',
+				name: {
+					placeholder: 'Название'
+				},
+				info: {
+					placeholder: 'Ссылка на картинку',
+					type: 'url'
+				},
+				button: {
+					name: '+',
+					fontSize: 36
+				}
+			};
+
+			popUpFormContent(formAdd);
+		}
+	}
+
+	// Изминения контента popup
+	function popUpFormContent({title, name, info, button}) {
+		const popUpTitle = popUp.querySelector('.popup__title'),
+			  popUpInputName = popUp.querySelector('.popup__input_type_name'),
+			  popUpInputInfo = popUp.querySelector('.popup__input_type_info'),
+			  popUpButton = popUp.querySelector('.popup__button');
+
+		// Название формы
+		popUpTitle.textContent = title;
+		// Имя первого поля
+		popUpInputName.placeholder = name.placeholder;
+		// Имя и атрибуты второго поля
+		popUpInputInfo.placeholder = info.placeholder;
+		// Условие добавления атрибута minlength
+		// В поле для ссылки он не нужен
+		if (info.minlength) {
+			popUpInputInfo.minLength = info.minlength;
+			popUpInputInfo.maxLength = info.maxlength;
+		} else {
+			popUpInputInfo.removeAttribute('minlength');
+			popUpInputInfo.removeAttribute('maxlength');
+		}
+		popUpInputInfo.type = info.type;
+		// Кнопка формы
+		popUpButton.textContent = button.name;
+		popUpButton.style.fontSize = `${button.fontSize}px`;
+	}
+
+	// Показываем или скрываем popup
+	rootMasterContainer.querySelector('.popup')
+					   .classList.toggle('popup_is-opened');
+
+	// Событие клика на кнопку - для закрытия формы
+	popupClose.addEventListener('click', popUpForm);
+	// Событие ввода в input - для условий формы
+	form.addEventListener('input', inputHandler);
+	// Событие отправки формы
+	form.addEventListener('submit', addList);
 }
 
 // Обработчик клика по сердечку
@@ -163,57 +242,88 @@ function likeVsRemove(event) {
 
 // Обработчик события input
 function inputHandler(event) {
-	const popupName = event.currentTarget.elements.name,
-		  popupLink = event.currentTarget.elements.link,
-		  popupButton = event.currentTarget.elements.submit,
-		  errorName = event.currentTarget.querySelector('.error');
+	const {name, info, submit} = event.currentTarget.elements,
+		  popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
+		  popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 
     // Условие блокировки кнопки формы
-    // Если поля пустые
-	if (popupName.value.lenght === 0 || popupLink.value.lenght === 0) {
-        popupButton.setAttribute('disabled', true);
-        // popupName.setCustomValidity('Пустое поле');
-	} else {
-        popupButton.removeAttribute('disabled');
-        // popupName.setCustomValidity('');
-    }
+	// Если поля пустые
+	
+	// if (name.value.length === 0) {
+	// 	disabledButton();
+	// 	popUpErrorName.textContent = 'Это обязательное поле';
+	// } else {
+	// 	noDisabledButton();
+	// 	popUpErrorName.textContent = '';
+	// }
+	
+	// if (info.value.length === 0) {
+	// 	disabledButton();
+	// 	popUpErrorInfo.textContent = 'Это обязательное поле';
+	// } else {
+	// 	noDisabledButton();
+	// 	popUpErrorInfo.textContent = '';
+    // }
 
     const specialSymbol = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '/', '§'];
     // Имя содержит только буквы
     // Проверяем, была ли введена цифра
-    // Регулярные выражения еще не знаю
-    // popupName.value.split('').forEach(function(item) {
+    // name.value.split('').forEach(function(item) {
     //     if (!Number.isNaN(+item) || specialSymbol.includes(item)) {
-    //         popupButton.setAttribute('disabled', true);
-    //         popupName.setCustomValidity('Название не должно содержать цифр или спец. символов');
+    //         disabledButton();
     //     } else {
-    //         popupButton.removeAttribute('disabled');
-    //         popupName.setCustomValidity('');
+    //         noDisabledButton();
     //     }
-    // });
-    if (!popupName.validity.valid) {
-		popupButton.setAttribute('disabled', true);
-		errorName.textContent = 'popupName.validationMessage';
-		// popupName.setCustomValidity('Название не должно содержать цифр или спец. символов');
-	} else {
-		popupButton.removeAttribute('disabled');
-		errorName.textContent = '1';
-		// popupName.setCustomValidity('');
+	// });
+	// console.log(!event.target.validity.valid);
+	// console.log(event.target === name);
+	// console.dir();
+
+	if (event.target === name) {
+		// Проверка на валидность атрибутам и типу
+		if (!name.validity.valid) {
+			disabledButton();
+			// console.dir(name);
+			if (name.value.length < 2) popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
+			if (name.value.length === 0) popUpErrorName.textContent = 'Это обязательное поле';
+		} else {
+			popUpErrorName.textContent = null;
+		}
+	}
+
+	if (event.target === info) {
+		// Проверка на валидность атрибутам и типу
+		if (!info.validity.valid) {
+			disabledButton();
+			console.dir(info);
+			if (info.type === 'text') {
+				if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+			}
+			if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
+		} else {
+			popUpErrorInfo.textContent = null;
+		}
 	}
 
     const linkProtocol = ['https', 'http'];
     // Ссылка ничинаться с https/http
     // Проверяем, содержит ли ссылка протокол
-    // Регулярные выражения еще не знаю
-    linkProtocol.forEach(function(item) {
-        if (!popupLink.value.includes(item)) {
-            popupButton.setAttribute('disabled', true);
-            popupLink.setCustomValidity('Ссылка должна ничинаться с https/http');
-        } else {
-            popupButton.removeAttribute('disabled');
-            popupLink.setCustomValidity('');
-        }
-    });
+    // linkProtocol.forEach(function(item) {
+    //     if (!info.value.includes(item)) {
+    //         disabledButton();
+    //     } else {
+    //         noDisabledButton();
+    //     }
+	// });
+	
+	// Блокировка кнопки формы
+	function disabledButton() {
+		submit.setAttribute('disabled', true);
+	}
+	// Разблокировка кнопки формы
+	function noDisabledButton() {
+		submit.removeAttribute('disabled');
+	}
 }
 
 /*
@@ -223,12 +333,8 @@ function inputHandler(event) {
 // Событие загрузки страницы
 window.addEventListener('load', loadedAddList);
 // Событие клика на кнопку "+" - для открытия формы
-infoButton.addEventListener('click', popUpForm);
-// Событие клика на кнопку - для закрытия формы
-popupClose.addEventListener('click', popUpForm);
+userInfoAdd.addEventListener('click', popUpForm);
+// Событие клика на кнопку "Edit" - для открытия формы
+userInfoEdit.addEventListener('click', popUpForm);
 // Событие клика на кнопку - like
 placesList.addEventListener('click', likeVsRemove);
-// Событие ввода в input - для условий формы
-form.addEventListener('input', inputHandler);
-// Событие отправки формы
-form.addEventListener('submit', addList);

@@ -2,7 +2,8 @@
 @import url(./user-info__data/user-info__data.css);
 @import url(./user-info__name/user-info__name.css);
 @import url(./user-info__job/user-info__job.css);
-@import url(./user-info__button/user-info__button.css);
+@import url(./user-info__add/user-info__add.css);
+@import url(./user-info__edit/user-info__edit.css);
 
 .user-info {
   display: flex;
