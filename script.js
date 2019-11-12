@@ -65,12 +65,11 @@ const initialCards = [
 
 // Добавление карточки в разметку при загрузке страницы
 function loadedAddList() {
-	Object.keys(initialCards).forEach(function(item) {
-		let cardName = initialCards[item].name,
-			cardImage = initialCards[item].link;
+	[...initialCards].forEach(item => {
+		let {name, link} = item;
 
 		// В блок placesList добавляем создданный div placeCard
-		placesList.appendChild(createElementsList(cardName, cardImage));
+		placesList.appendChild(createElementsList(name, link));
 	});
 }
 
@@ -109,23 +108,43 @@ function createElementsList(nameValue, infoValue) {
 	// В блок placeCardDescription добавляем создданный button placeCardLikeIcon
 	placeCardDescription.appendChild(placeCardLikeIcon);
 
+	placeCardImage.addEventListener('click', popUpImg);
+
 	// Выводим список карточек
 	return placeCard;
 }
+
+// Добавления контента профиля в разметку
+const addProfile = (nameValue, infoValue) => {
+	const userInfoName = rootMasterContainer.querySelector('.user-info__name');
+	const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
+
+	userInfoName.textContent = nameValue;
+	userInfoJob.textContent = infoValue;
+};
 
 // Добавление карточки в разметку
 function addList(event) {
 	event.preventDefault();
 
-		// Имя в форме
+	// Имя в форме
 	let {name, info, submit} = form.elements;
 
-	// В блок placesList добавляем создданный div placeCard
-	placesList.appendChild(createElementsList(name.value, info.value));
+	// Если открылась форма для добавления карточки
+	if (submit.textContent === '+') {
+		// В блок placesList добавляем создданный div placeCard
+		placesList.appendChild(createElementsList(name.value, info.value));
+	} 
+	// Если открылась форма для изменения профиля
+	else if (submit.textContent === 'Сохранить') {
+		// В блок placesList добавляем создданный div placeCard
+		addProfile(name.value, info.value);
+	}
 
 	// Сброс формы
 	form.reset();
 	// Закрытие popup по срабатыванию
+	console.log('Закрываю форму');
 	popUpForm();
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
@@ -139,7 +158,6 @@ function popUpForm(event) {
 	if (!popUp.classList.contains('popup_is-opened')) {
 		// Если нужно отредактировать профиль
 		if (event.target.textContent === 'Edit') {
-			console.log('Edit button');
 
 			const formEdit = {
 				title: 'Редактировать профиль',
@@ -164,8 +182,6 @@ function popUpForm(event) {
 		
 		// Если нужно добавить новое место
 		if (event.target.textContent === '+') {
-			console.log('DDDD');
-			// console.dir(event.target);
 
 			const formAdd = {
 				title: 'Новое место',
@@ -218,9 +234,19 @@ function popUpForm(event) {
 	rootMasterContainer.querySelector('.popup')
 					   .classList.toggle('popup_is-opened');
 
-
-	// Сброс формы
-	form.reset();
+	// Условие: если popup открыт больше не заходить в эти условия
+	if (!popUp.classList.contains('popup_is-opened')) {
+		// Сброс формы
+		form.reset();
+		
+		const popUpErrorName = form.querySelector('.popup__error_name');
+		const popUpErrorInfo = form.querySelector('.popup__error_info');
+		// Сброс сообщений об ошибках (input)
+		if (popUpErrorName.textContent || popUpErrorInfo.textContent) {
+			popUpErrorName.textContent = null;
+			popUpErrorInfo.textContent = null;
+		}
+	}
 	
 	// Событие клика на кнопку - для закрытия формы
 	popupClose.addEventListener('click', popUpForm);
@@ -244,54 +270,51 @@ function likeVsRemove(event) {
 	}
 }
 
+function popUpImg(event) {
+	const popUp = rootMasterContainer.querySelector('.popup-image');
+	const popUpImg = popUp.querySelector('.popup-image__img');
+	const popUpClose = popUp.querySelector('.popup-image__close');
+
+	// Открыть фото
+	
+	popUp.classList.toggle('popup-image_is-opened');
+	console.log(event.target);
+	if (event.target.classList.contains('place-card__image')) {
+		// popUpToggle();
+	} else if (event.target === popUpClose) {
+		console.log('Close');
+	}
+	
+	// Подставить конкретное фото
+	
+	// Закрыть фото
+	
+	popUpClose.addEventListener('click', popUpImg);
+}
+
 // Обработчик события input
 function inputHandler(event) {
 	const {name, info, submit} = event.currentTarget.elements,
 		  popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
 		  popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 
-    // Условие блокировки кнопки формы
-	// Если поля пустые
-	
-	// if (name.value.length === 0) {
-	// 	disabledButton();
-	// 	popUpErrorName.textContent = 'Это обязательное поле';
-	// } else {
-	// 	noDisabledButton();
-	// 	popUpErrorName.textContent = '';
-	// }
-	
-	// if (info.value.length === 0) {
-	// 	disabledButton();
-	// 	popUpErrorInfo.textContent = 'Это обязательное поле';
-	// } else {
-	// 	noDisabledButton();
-	// 	popUpErrorInfo.textContent = '';
-    // }
-
-    const specialSymbol = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '/', '§'];
-    // Имя содержит только буквы
-    // Проверяем, была ли введена цифра
-    // name.value.split('').forEach(function(item) {
-    //     if (!Number.isNaN(+item) || specialSymbol.includes(item)) {
-    //         disabledButton();
-    //     } else {
-    //         noDisabledButton();
-    //     }
-	// });
-	// console.log(!event.target.validity.valid);
-	// console.log(event.target === name);
-	// console.dir();
-
 	if (event.target === name) {
 		// Проверка на валидность атрибутам и типу
 		if (!name.validity.valid) {
 			disabledButton();
-			// console.dir(name);
-			if (name.value.length < 2) popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
-			if (name.value.length === 0) popUpErrorName.textContent = 'Это обязательное поле';
+
+			if (name.value.length === 0) {
+				console.log('=== 0: ' + name.value.length);
+				popUpErrorName.textContent = 'Это обязательное поле';
+			} else if (name.value.length < 2) {
+				console.log('< 2: ' + name.value.length);
+				popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
+			}
+			
+			
 		} else {
 			popUpErrorName.textContent = null;
+			noDisabledButton();
 		}
 	}
 
@@ -299,34 +322,43 @@ function inputHandler(event) {
 		// Проверка на валидность атрибутам и типу
 		if (!info.validity.valid) {
 			disabledButton();
-			console.dir(info);
+
+			// Если текствое поле (ссылке это сообщение не нужно)
 			if (info.type === 'text') {
 				if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+			} 
+
+			// Ссылка ничинаться с https/http
+			// Проверяем, содержит ли ссылка протокол
+			else if (info.type === 'url') {
+				['https', 'http'].forEach(function(item) {
+					if (!info.value.includes(item)) {
+						popUpErrorInfo.textContent = 'Ссылка должна начинаться на https/http';
+					} else {
+						popUpErrorInfo.textContent = null;
+					}
+				});
 			}
+
 			if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
+
 		} else {
 			popUpErrorInfo.textContent = null;
+			noDisabledButton();
 		}
-	}
 
-    const linkProtocol = ['https', 'http'];
-    // Ссылка ничинаться с https/http
-    // Проверяем, содержит ли ссылка протокол
-    // linkProtocol.forEach(function(item) {
-    //     if (!info.value.includes(item)) {
-    //         disabledButton();
-    //     } else {
-    //         noDisabledButton();
-    //     }
-	// });
+	}
 	
 	// Блокировка кнопки формы
 	function disabledButton() {
 		submit.setAttribute('disabled', true);
 	}
+
 	// Разблокировка кнопки формы
 	function noDisabledButton() {
-		submit.removeAttribute('disabled');
+		if (info.validity.valid && name.validity.valid) {
+			submit.removeAttribute('disabled');
+		}
 	}
 }
 
