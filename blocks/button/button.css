@@ -5,6 +5,7 @@
   cursor: pointer;
   /* display: block; */
   /* line-height: 1.5; */
+  transition: 0.5s;
 }
 
 .button:focus {
