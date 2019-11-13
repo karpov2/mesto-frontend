@@ -66,11 +66,7 @@ const initialCards = [
 // Добавление карточки в разметку при загрузке страницы
 const loadedAddList = () => {
 	[...initialCards].forEach(item => {
-<<<<<<< HEAD
 		let { name, link } = item;
-=======
-		let {name, link} = item;
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 
 		// В блок placesList добавляем создданный div placeCard
 		placesList.appendChild(createElementsList(name, link));
@@ -137,21 +133,13 @@ const addList = (event) => {
 	event.preventDefault();
 
 	// Имя в форме
-<<<<<<< HEAD
 	let { name, info, submit } = form.elements;
-=======
-	let {name, info, submit} = form.elements;
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 
 	// Если открылась форма для добавления карточки
 	if (submit.textContent === '+') {
 		// В блок placesList добавляем создданный div placeCard
 		placesList.appendChild(createElementsList(name.value, info.value));
-<<<<<<< HEAD
 	}
-=======
-	} 
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 	// Если открылась форма для изменения профиля
 	else if (submit.textContent === 'Сохранить') {
 		// В блок placesList добавляем создданный div placeCard
@@ -169,7 +157,6 @@ const addList = (event) => {
 // Открытие и закрытие popup
 const popUpForm = (event) => {
 	const popUp = rootMasterContainer.querySelector('.popup'),
-<<<<<<< HEAD
 		popUpButton = popUp.querySelector('.popup__button');
 
 	// Изминения контента popup
@@ -208,9 +195,6 @@ const popUpForm = (event) => {
 		// Из-за того что контент кнопки "+", его нужно в несколько раз увеличивать
 		popUpButton.style.fontSize = `${button.fontSize}px`;
 	};
-=======
-		  popUpButton = popUp.querySelector('.popup__button');
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 
 	// Изминения контента popup
 	const popUpFormContent = ({title, name, info, button}) => {
@@ -309,11 +293,6 @@ const popUpForm = (event) => {
 		// Сброс формы
 		form.reset();
 		popUpButton.setAttribute('disabled', true);
-<<<<<<< HEAD
-
-=======
-		
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 		const popUpErrorName = form.querySelector('.popup__error_name');
 		const popUpErrorInfo = form.querySelector('.popup__error_info');
 		// Сброс сообщений об ошибках (input)
@@ -322,11 +301,6 @@ const popUpForm = (event) => {
 			popUpErrorInfo.textContent = null;
 		}
 	}
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 	// Событие клика на кнопку - для закрытия формы
 	popupClose.addEventListener('click', popUpForm);
 	// Событие ввода в input - для условий формы
@@ -374,15 +348,9 @@ const popUpImg = (event) => {
 
 // Обработчик события input
 const inputHandler = (event) => {
-<<<<<<< HEAD
 	const { name, info, submit } = event.currentTarget.elements,
 		popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
 		popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
-=======
-	const {name, info, submit} = event.currentTarget.elements,
-		  popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
-		  popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 
 	// Блокировка кнопки формы
 	const disabledButton = () => {
@@ -395,7 +363,6 @@ const inputHandler = (event) => {
 			submit.removeAttribute('disabled');
 		}
 	};
-<<<<<<< HEAD
 
 	try {
 		if (event.target === name) {
@@ -410,22 +377,6 @@ const inputHandler = (event) => {
 				}
 
 
-=======
-
-	try {
-		if (event.target === name) {
-			// Проверка на валидность атрибутам и типу
-			if (!name.validity.valid) {
-				disabledButton();
-	
-				if (name.value.length === 0) {
-					popUpErrorName.textContent = 'Это обязательное поле';
-				} else if (name.value.length < 2) {
-					popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
-				}
-				
-				
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 			} else {
 				popUpErrorName.textContent = null;
 				noDisabledButton();
@@ -440,21 +391,12 @@ const inputHandler = (event) => {
 			// Проверка на валидность атрибутам и типу
 			if (!info.validity.valid) {
 				disabledButton();
-<<<<<<< HEAD
 
 				// Если текствое поле (ссылке это сообщение не нужно)
 				if (info.type === 'text') {
 					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
 				}
 
-=======
-	
-				// Если текствое поле (ссылке это сообщение не нужно)
-				if (info.type === 'text') {
-					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
-				} 
-	
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 				// Ссылка ничинаться с https/http
 				// Проверяем, содержит ли ссылка протокол
 				else if (info.type === 'url') {
@@ -466,24 +408,13 @@ const inputHandler = (event) => {
 						}
 					});
 				}
-<<<<<<< HEAD
 
 				if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
 
-=======
-	
-				if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
-	
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 			} else {
 				popUpErrorInfo.textContent = null;
 				noDisabledButton();
 			}
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> fa943ded47e37e76afd8f177c61fd3619a007277
 		}
 	} catch (error) {
 		console.log('И такое тоже со всеми бывает');
