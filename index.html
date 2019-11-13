@@ -29,17 +29,24 @@
     <div class="places-list root__section">
 
     </div>
+
+    <div class="popup-image">
+      <div class="popup-image__content">
+        <img src="./images/close.svg" alt="" class="popup-image__close">
+        <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="" class="popup-image__img">
+      </div>
+    </div>
     
     <div class="popup">
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
-        <h3 class="popup__title">Новое место</h3>
+        <h3 class="popup__title"></h3>
         <form class="popup__form" name="new">
-            <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название" autocomplete="off" minlength="2" maxlength="30" required>
+            <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="" autocomplete="off" minlength="2" maxlength="30" required>
             <div class="popup__error popup__error_name"></div>
-            <input type="url" name="info" class="popup__input popup__input_type_info" placeholder="Ссылка на картинку" autocomplete="off" required>
+            <input type="url" name="info" class="popup__input popup__input_type_info" placeholder="" autocomplete="off" required>
             <div class="popup__error popup__error_info"></div>
-            <button type="submit" name="submit" class="button popup__button" disabled>+</button>
+            <button type="submit" name="submit" class="button popup__button" disabled></button>
         </form>
       </div>
     </div>

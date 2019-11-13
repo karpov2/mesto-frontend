@@ -64,18 +64,17 @@ const initialCards = [
  */
 
 // Добавление карточки в разметку при загрузке страницы
-function loadedAddList() {
-	Object.keys(initialCards).forEach(function(item) {
-		let cardName = initialCards[item].name,
-			cardImage = initialCards[item].link;
+const loadedAddList = () => {
+	[...initialCards].forEach(item => {
+		let { name, link } = item;
 
 		// В блок placesList добавляем создданный div placeCard
-		placesList.appendChild(createElementsList(cardName, cardImage));
+		placesList.appendChild(createElementsList(name, link));
 	});
-}
+};
 
 // Создание новых карточек
-function createElementsList(nameValue, infoValue) {
+const createElementsList = (nameValue, infoValue) => {
 	// Создание родительского контейнера -> "place-card"
 	const placeCard = document.createElement('div');
 	// Создание блока для фона карточки -> "place-card__image"
@@ -109,19 +108,43 @@ function createElementsList(nameValue, infoValue) {
 	// В блок placeCardDescription добавляем создданный button placeCardLikeIcon
 	placeCardDescription.appendChild(placeCardLikeIcon);
 
+	// Подключаемся к кнопке закрытия фото
+	const popUpClose = rootMasterContainer.querySelector('.popup-image__close');
+	// Событие на открыть фото
+	placeCardImage.addEventListener('click', popUpImg);
+	// Событие на закрыть фото
+	popUpClose.addEventListener('click', popUpImg);
+
 	// Выводим список карточек
 	return placeCard;
-}
+};
+
+// Добавления контента профиля в разметку
+const addProfile = (nameValue, infoValue) => {
+	const userInfoName = rootMasterContainer.querySelector('.user-info__name');
+	const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
+
+	userInfoName.textContent = nameValue;
+	userInfoJob.textContent = infoValue;
+};
 
 // Добавление карточки в разметку
-function addList(event) {
+const addList = (event) => {
 	event.preventDefault();
 
-		// Имя в форме
-	let {name, info, submit} = form.elements;
+	// Имя в форме
+	let { name, info, submit } = form.elements;
 
-	// В блок placesList добавляем создданный div placeCard
-	placesList.appendChild(createElementsList(name.value, info.value));
+	// Если открылась форма для добавления карточки
+	if (submit.textContent === '+') {
+		// В блок placesList добавляем создданный div placeCard
+		placesList.appendChild(createElementsList(name.value, info.value));
+	}
+	// Если открылась форма для изменения профиля
+	else if (submit.textContent === 'Сохранить') {
+		// В блок placesList добавляем создданный div placeCard
+		addProfile(name.value, info.value);
+	}
 
 	// Сброс формы
 	form.reset();
@@ -129,18 +152,56 @@ function addList(event) {
 	popUpForm();
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
-}
+};
 
 // Открытие и закрытие popup
-function popUpForm(event) {
-	const popUp = rootMasterContainer.querySelector('.popup');
+const popUpForm = (event) => {
+	const popUp = rootMasterContainer.querySelector('.popup'),
+		popUpButton = popUp.querySelector('.popup__button');
+
+	// Изминения контента popup
+	const popUpFormContent = ({ title, name, info, button }) => {
+		const popUpTitle = popUp.querySelector('.popup__title'),
+			popUpInputName = popUp.querySelector('.popup__input_type_name'),
+			popUpInputInfo = popUp.querySelector('.popup__input_type_info');
+
+		// Название формы
+		popUpTitle.textContent = title;
+		// Имя первого поля
+		popUpInputName.placeholder = name.placeholder;
+		if (event.target.textContent === 'Edit') {
+			const userInfoName = rootMasterContainer.querySelector('.user-info__name');
+			const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
+
+			popUpInputName.value = userInfoName.textContent;
+			popUpInputInfo.value = userInfoJob.textContent;
+			popUpButton.removeAttribute('disabled');
+		}
+
+		// Имя и атрибуты второго поля
+		popUpInputInfo.placeholder = info.placeholder;
+		// Условие добавления атрибута minlength
+		// В поле для ссылки он не нужен
+		if (info.minlength) {
+			popUpInputInfo.minLength = info.minlength;
+			popUpInputInfo.maxLength = info.maxlength;
+		} else {
+			popUpInputInfo.removeAttribute('minlength');
+			popUpInputInfo.removeAttribute('maxlength');
+		}
+		popUpInputInfo.type = info.type;
+		// Кнопка формы
+		popUpButton.textContent = button.name;
+		// Из-за того что контент кнопки "+", его нужно в несколько раз увеличивать
+		popUpButton.style.fontSize = `${button.fontSize}px`;
+	};
 
 	// Условие: если popup открыт больше не заходить в эти условия
 	if (!popUp.classList.contains('popup_is-opened')) {
 		// Если нужно отредактировать профиль
 		if (event.target.textContent === 'Edit') {
-			console.log('Edit button');
 
+			// Обьект данных для popup edit
 			const formEdit = {
 				title: 'Редактировать профиль',
 				name: {
@@ -160,13 +221,12 @@ function popUpForm(event) {
 
 			popUpFormContent(formEdit);
 
-		} 
-		
+		}
+
 		// Если нужно добавить новое место
 		if (event.target.textContent === '+') {
-			console.log('DDDD');
-			// console.dir(event.target);
 
+			// Обьект данных для popup add
 			const formAdd = {
 				title: 'Новое место',
 				name: {
@@ -186,53 +246,37 @@ function popUpForm(event) {
 		}
 	}
 
-	// Изминения контента popup
-	function popUpFormContent({title, name, info, button}) {
-		const popUpTitle = popUp.querySelector('.popup__title'),
-			  popUpInputName = popUp.querySelector('.popup__input_type_name'),
-			  popUpInputInfo = popUp.querySelector('.popup__input_type_info'),
-			  popUpButton = popUp.querySelector('.popup__button');
-
-		// Название формы
-		popUpTitle.textContent = title;
-		// Имя первого поля
-		popUpInputName.placeholder = name.placeholder;
-		// Имя и атрибуты второго поля
-		popUpInputInfo.placeholder = info.placeholder;
-		// Условие добавления атрибута minlength
-		// В поле для ссылки он не нужен
-		if (info.minlength) {
-			popUpInputInfo.minLength = info.minlength;
-			popUpInputInfo.maxLength = info.maxlength;
-		} else {
-			popUpInputInfo.removeAttribute('minlength');
-			popUpInputInfo.removeAttribute('maxlength');
-		}
-		popUpInputInfo.type = info.type;
-		// Кнопка формы
-		popUpButton.textContent = button.name;
-		popUpButton.style.fontSize = `${button.fontSize}px`;
-	}
 
 	// Показываем или скрываем popup
 	rootMasterContainer.querySelector('.popup')
-					   .classList.toggle('popup_is-opened');
+		.classList.toggle('popup_is-opened');
 
+	// Условие: если popup открыт больше не заходить в эти условия
+	if (!popUp.classList.contains('popup_is-opened')) {
+		// Сброс формы
+		form.reset();
+		popUpButton.setAttribute('disabled', true);
 
-	// Сброс формы
-	form.reset();
-	
+		const popUpErrorName = form.querySelector('.popup__error_name');
+		const popUpErrorInfo = form.querySelector('.popup__error_info');
+		// Сброс сообщений об ошибках (input)
+		if (popUpErrorName.textContent || popUpErrorInfo.textContent) {
+			popUpErrorName.textContent = null;
+			popUpErrorInfo.textContent = null;
+		}
+	}
+
 	// Событие клика на кнопку - для закрытия формы
 	popupClose.addEventListener('click', popUpForm);
 	// Событие ввода в input - для условий формы
 	form.addEventListener('input', inputHandler);
 	// Событие отправки формы
 	form.addEventListener('submit', addList);
-}
+};
 
 // Обработчик клика по сердечку
 // Удаление карточки
-function likeVsRemove(event) {
+const likeVsRemove = (event) => {
 	// Обработчик клика по сердечку
 	if (event.target.classList.contains('place-card__like-icon')) {
 		event.target.classList.toggle('place-card__like-icon_liked');
@@ -242,93 +286,106 @@ function likeVsRemove(event) {
 	if (event.target.classList.contains('place-card__delete-icon')) {
 		placesList.removeChild(event.target.closest('.place-card'));
 	}
-}
+};
+
+// Открываем фото или закрываем
+// Добавляем конкретное фото
+const popUpImg = (event) => {
+	const popUp = rootMasterContainer.querySelector('.popup-image');
+	const popUpImage = popUp.querySelector('.popup-image__img');
+
+	// Открыть или закрыть фото
+	const popUpIsOpened = () => {
+		popUp.classList.toggle('popup-image_is-opened');
+	};
+
+	if (event.target.classList.contains('place-card__image')) {
+		// Подставить конкретное фото
+		popUpImage.src = event.target.style.backgroundImage.slice(5, -2);
+
+		// Открыть или закрыть фото
+		popUpIsOpened();
+	} else if (event.target.classList.contains('popup-image__close')) {
+		// Открыть или закрыть фото
+		popUpIsOpened();
+	}
+};
 
 // Обработчик события input
-function inputHandler(event) {
-	const {name, info, submit} = event.currentTarget.elements,
-		  popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
-		  popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
+const inputHandler = (event) => {
+	const { name, info, submit } = event.currentTarget.elements,
+		popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
+		popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 
-    // Условие блокировки кнопки формы
-	// Если поля пустые
-	
-	// if (name.value.length === 0) {
-	// 	disabledButton();
-	// 	popUpErrorName.textContent = 'Это обязательное поле';
-	// } else {
-	// 	noDisabledButton();
-	// 	popUpErrorName.textContent = '';
-	// }
-	
-	// if (info.value.length === 0) {
-	// 	disabledButton();
-	// 	popUpErrorInfo.textContent = 'Это обязательное поле';
-	// } else {
-	// 	noDisabledButton();
-	// 	popUpErrorInfo.textContent = '';
-    // }
-
-    const specialSymbol = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '/', '§'];
-    // Имя содержит только буквы
-    // Проверяем, была ли введена цифра
-    // name.value.split('').forEach(function(item) {
-    //     if (!Number.isNaN(+item) || specialSymbol.includes(item)) {
-    //         disabledButton();
-    //     } else {
-    //         noDisabledButton();
-    //     }
-	// });
-	// console.log(!event.target.validity.valid);
-	// console.log(event.target === name);
-	// console.dir();
-
-	if (event.target === name) {
-		// Проверка на валидность атрибутам и типу
-		if (!name.validity.valid) {
-			disabledButton();
-			// console.dir(name);
-			if (name.value.length < 2) popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
-			if (name.value.length === 0) popUpErrorName.textContent = 'Это обязательное поле';
-		} else {
-			popUpErrorName.textContent = null;
-		}
-	}
-
-	if (event.target === info) {
-		// Проверка на валидность атрибутам и типу
-		if (!info.validity.valid) {
-			disabledButton();
-			console.dir(info);
-			if (info.type === 'text') {
-				if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
-			}
-			if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
-		} else {
-			popUpErrorInfo.textContent = null;
-		}
-	}
-
-    const linkProtocol = ['https', 'http'];
-    // Ссылка ничинаться с https/http
-    // Проверяем, содержит ли ссылка протокол
-    // linkProtocol.forEach(function(item) {
-    //     if (!info.value.includes(item)) {
-    //         disabledButton();
-    //     } else {
-    //         noDisabledButton();
-    //     }
-	// });
-	
 	// Блокировка кнопки формы
-	function disabledButton() {
+	const disabledButton = () => {
 		submit.setAttribute('disabled', true);
-	}
+	};
+
 	// Разблокировка кнопки формы
-	function noDisabledButton() {
-		submit.removeAttribute('disabled');
+	const noDisabledButton = () => {
+		if (info.validity.valid && name.validity.valid) {
+			submit.removeAttribute('disabled');
+		}
+	};
+
+	try {
+		if (event.target === name) {
+			// Проверка на валидность атрибутам и типу
+			if (!name.validity.valid) {
+				disabledButton();
+
+				if (name.value.length === 0) {
+					popUpErrorName.textContent = 'Это обязательное поле';
+				} else if (name.value.length < 2) {
+					popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
+				}
+
+
+			} else {
+				popUpErrorName.textContent = null;
+				noDisabledButton();
+			}
+		}
+	} catch (error) {
+		console.log('Со всеми бывает');
 	}
-}
+
+	try {
+		if (event.target === info) {
+			// Проверка на валидность атрибутам и типу
+			if (!info.validity.valid) {
+				disabledButton();
+
+				// Если текствое поле (ссылке это сообщение не нужно)
+				if (info.type === 'text') {
+					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+				}
+
+				// Ссылка ничинаться с https/http
+				// Проверяем, содержит ли ссылка протокол
+				else if (info.type === 'url') {
+					['https', 'http'].forEach(item => {
+						if (!info.value.includes(item)) {
+							popUpErrorInfo.textContent = 'Ссылка должна начинаться на https/http';
+						} else {
+							popUpErrorInfo.textContent = null;
+						}
+					});
+				}
+
+				if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
+
+			} else {
+				popUpErrorInfo.textContent = null;
+				noDisabledButton();
+			}
+
+		}
+	} catch (error) {
+		console.log('И такое тоже со всеми бывает');
+	}
+};
 
 /*
  * Обработчики событий
@@ -342,3 +399,91 @@ userInfoAdd.addEventListener('click', popUpForm);
 userInfoEdit.addEventListener('click', popUpForm);
 // Событие клика на кнопку - like
 placesList.addEventListener('click', likeVsRemove);
+
+
+
+
+/**
+ * Здравствуйте
+ *
+ * Правильно что используете event.target
+ *
+ * Можно лучше. Не обязательно постоянно использовать addEventListener('click' что-бы повесить
+ * На один и тот же элемент несколько раз. Достаточно применить один раз и реализовать там весь функционал
+ *
+ *Можно лучше. То что находится в addEventListener необходимо вынести в отдельный метод класса
+ *Вы в будущем можете переиспользовать эти методы по необходимости
+ *
+ *
+ * Можно лучше: обычно названия, для примера 'Должно быть от 2 до 30 символов'
+ * выносят в отдельный объект. Допустим может появится задача сделать многоязычный сайт
+ * Для примера : const lang = { validationLenght: 'Должно быть от 2 до 30 символов' }
+ *
+ * Исправить:
+ * Зачем Вы используете стрелочные функции, внути стрелочных функций и вообще стрелочные функции.
+ * Они будут работать в современных браузерах, но не будут работать в  ES5. Переписать.
+ * Вынести функции из функций
+ * Сделать более простые функции
+ *
+ * Такие моменты убрать упростить
+ * 	if (info.type === 'text') {
+					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+				}
+
+ * Функция const loadedAddList = () => {
+	переписать под ES5. а в качестве параметров должен приниматься массив объектов
+
+ *
+ * Манипулировать классами стилей а не стилями, здесь только логика
+ * 		popUpButton.style.fontSize = `${button.fontSize}px`;
+ *
+ * В этом месте вы предлагаете не менять имя кнопки, иначе кнопка перестанет работать
+ * 		if (event.target.textContent === 'Edit') {
+ * Привязать проверку к lassList.contains
+ * Это касается здесь
+ * 	if (submit.textContent === '+')
+ * и здесь
+ * (submit.textContent === 'Сохранить')
+ *
+ * Функцию разбить на много небольших
+ * const inputHandler = (event) => {
+ * Можно долго отлавливать ошибки если они будут
+ *
+ *
+ *
+ * initialCards в отдельный файл, меньше строк, больше понимание,
+ * подключить его можно через  <script src="js/initialCards.js"></script>
+ *
+ * Про создание карточки.
+ * Вы можете реализовать функцию, которая сразу же возвращает “кусок” разметки. Это решает проблему постоянного криэйта DOM-элементов.
+       cardTemplate() {
+           return `<div class="place-card">
+                             Здесь вся ваша разметка карточки.
+                   </div>`
+       };
+ * Вы можете реализовать функцию, которая сразу же возвращает “кусок” разметки. Это решает проблему постоянного криэйта DOM-элементов.
+       cardTemplate() {
+           return `<div class="place-card">
+                             Здесь вся ваша разметка карточки.
+                   </div>`
+       };
+ * Обратите внимание на использование backtick ` - это новый нововведение ES6, в нем можно корректно переносить строки и вставлять внутрь разметки JS-код.
+ * Конкретнее про вставку JS-кода. Сейчас вы используете способ стандарта ES5 - ' + card.link + ‘. Грузно, не правда ли?
+ * В ES6, используя ` бэктик, появляется возможность интерполяции `Строковое значение разметки ${console.log(‘А здесь уже JavaScript’)} `;
+ * Обладая данными знаниями, возникает идея оптимизации createCard - теперь эта функция по прежнему принимает card, содержащую нужные параметры, которые
+ * непосредственно вставляются в разметку.
+       cardTemplate(string) {
+           return `<div class="place-card">
+                             ${string}
+                   </div>`
+       };
+ *  Этот кусок разметки в дальнейшем можно вставить в DOM, воспользовавшись методом insertAdjacentHTML().
+ *  Однако такой способ вставки пользовательских строк является менее безопасным
+ *  https://developer.mozilla.org/ru/docs/Web/API/Element/insertAdjacentHTML
+ *
+ * 2. Путь оптимизации уже текущего кода с использованием documentFragment и уменьшении работы над DOM.
+ *     https://developer.mozilla.org/ru/docs/Web/API/DocumentFragment - здесь можно почитать о данном методе и его кейсах.
+ *     https://developer.mozilla.org/ru/docs/Web/HTML/Element/template - очень интересный тег, его также можно использовать для создание компонентов.
+ *
+ *
+ */
