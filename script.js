@@ -156,19 +156,28 @@ const addList = (event) => {
 
 // Открытие и закрытие popup
 const popUpForm = (event) => {
-	const popUp = rootMasterContainer.querySelector('.popup');
+	const popUp = rootMasterContainer.querySelector('.popup'),
+		  popUpButton = popUp.querySelector('.popup__button');
 
 	// Изминения контента popup
 	const popUpFormContent = ({title, name, info, button}) => {
 		const popUpTitle = popUp.querySelector('.popup__title'),
 			  popUpInputName = popUp.querySelector('.popup__input_type_name'),
-			  popUpInputInfo = popUp.querySelector('.popup__input_type_info'),
-			  popUpButton = popUp.querySelector('.popup__button');
+			  popUpInputInfo = popUp.querySelector('.popup__input_type_info');
 
 		// Название формы
 		popUpTitle.textContent = title;
 		// Имя первого поля
 		popUpInputName.placeholder = name.placeholder;
+		if (event.target.textContent === 'Edit') {
+			const userInfoName = rootMasterContainer.querySelector('.user-info__name');
+			const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
+			
+			popUpInputName.value = userInfoName.textContent;
+			popUpInputInfo.value = userInfoJob.textContent;
+			popUpButton.removeAttribute('disabled');
+		}
+
 		// Имя и атрибуты второго поля
 		popUpInputInfo.placeholder = info.placeholder;
 		// Условие добавления атрибута minlength
@@ -246,6 +255,7 @@ const popUpForm = (event) => {
 	if (!popUp.classList.contains('popup_is-opened')) {
 		// Сброс формы
 		form.reset();
+		popUpButton.setAttribute('disabled', true);
 		
 		const popUpErrorName = form.querySelector('.popup__error_name');
 		const popUpErrorInfo = form.querySelector('.popup__error_info');
@@ -307,65 +317,73 @@ const inputHandler = (event) => {
 		  popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
 		  popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 
-	if (event.target === name) {
-		// Проверка на валидность атрибутам и типу
-		if (!name.validity.valid) {
-			disabledButton();
-
-			if (name.value.length === 0) {
-				popUpErrorName.textContent = 'Это обязательное поле';
-			} else if (name.value.length < 2) {
-				popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
-			}
-			
-			
-		} else {
-			popUpErrorName.textContent = null;
-			noDisabledButton();
-		}
-	}
-
-	if (event.target === info) {
-		// Проверка на валидность атрибутам и типу
-		if (!info.validity.valid) {
-			disabledButton();
-
-			// Если текствое поле (ссылке это сообщение не нужно)
-			if (info.type === 'text') {
-				if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
-			} 
-
-			// Ссылка ничинаться с https/http
-			// Проверяем, содержит ли ссылка протокол
-			else if (info.type === 'url') {
-				['https', 'http'].forEach(function(item) {
-					if (!info.value.includes(item)) {
-						popUpErrorInfo.textContent = 'Ссылка должна начинаться на https/http';
-					} else {
-						popUpErrorInfo.textContent = null;
-					}
-				});
-			}
-
-			if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
-
-		} else {
-			popUpErrorInfo.textContent = null;
-			noDisabledButton();
-		}
-
-	}
-	
 	// Блокировка кнопки формы
-	function disabledButton() {
+	const disabledButton = () => {
 		submit.setAttribute('disabled', true);
-	}
+	};
 
 	// Разблокировка кнопки формы
-	function noDisabledButton() {
+	const noDisabledButton = () => {
 		if (info.validity.valid && name.validity.valid) {
 			submit.removeAttribute('disabled');
 		}
+	};
+
+	try {
+		if (event.target === name) {
+			// Проверка на валидность атрибутам и типу
+			if (!name.validity.valid) {
+				disabledButton();
+	
+				if (name.value.length === 0) {
+					popUpErrorName.textContent = 'Это обязательное поле';
+				} else if (name.value.length < 2) {
+					popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
+				}
+				
+				
+			} else {
+				popUpErrorName.textContent = null;
+				noDisabledButton();
+			}
+		}
+	} catch (error) {
+		console.log('Со всеми бывает');
+	}
+
+	try {
+		if (event.target === info) {
+			// Проверка на валидность атрибутам и типу
+			if (!info.validity.valid) {
+				disabledButton();
+	
+				// Если текствое поле (ссылке это сообщение не нужно)
+				if (info.type === 'text') {
+					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+				} 
+	
+				// Ссылка ничинаться с https/http
+				// Проверяем, содержит ли ссылка протокол
+				else if (info.type === 'url') {
+					['https', 'http'].forEach(item => {
+						if (!info.value.includes(item)) {
+							popUpErrorInfo.textContent = 'Ссылка должна начинаться на https/http';
+						} else {
+							popUpErrorInfo.textContent = null;
+						}
+					});
+				}
+	
+				if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
+	
+			} else {
+				popUpErrorInfo.textContent = null;
+				noDisabledButton();
+			}
+	
+		}
+	} catch (error) {
+		console.log('И такое тоже со всеми бывает');
 	}
 };
 
