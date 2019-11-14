@@ -3,127 +3,66 @@
  */
 
 // Основной контейнер
-const rootMasterContainer = document.querySelector('.root'),
-	// Список карточек
-	placesList = rootMasterContainer.querySelector('.places-list'),
-	// Кнопка "+" открытия popup окна
-	userInfoAdd = rootMasterContainer.querySelector('.user-info__add'),
-	// Кнопка "Edit" открытия popup окна
-	userInfoEdit = rootMasterContainer.querySelector('.user-info__edit'),
-	// Крестик - закрытие popup окна
-	popupClose = rootMasterContainer.querySelector('.popup__close'),
-	// Форма
-	form = document.forms.new;
+const rootMasterContainer = document.querySelector('.root');
 
-const initialCards = [
-	{
-		name: 'Архыз',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-	},
-	{
-		name: 'Челябинская область',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-	},
-	{
-		name: 'Иваново',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-	},
-	{
-		name: 'Камчатка',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-	},
-	{
-		name: 'Холмогорский район',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-	},
-	{
-		name: 'Байкал',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-	},
-	{
-		name: 'Нургуш',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/khrebet-nurgush.jpg'
-	},
-	{
-		name: 'Тулиновка',
-		link:
-			'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/tulinovka.jpg'
-	},
-	{
-		name: 'Остров Желтухина',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/zheltukhin-island.jpg'
-	},
-	{
-		name: 'Владивосток',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/vladivostok.jpg'
-	}
-];
+// Список карточек
+const placesList = rootMasterContainer.querySelector('.places-list');
+
+// Профиль
+const userInfoName = rootMasterContainer.querySelector('.user-info__name');
+const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
+
+// Подключаемся к кнопке закрытия фото
+const popUpImageClose = placesList.querySelector('.popup-image__close');
+
+// Кнопка "+" открытия popup окна
+const userInfoAdd = rootMasterContainer.querySelector('.user-info__add');
+// Кнопка "Edit" открытия popup окна
+const userInfoEdit = rootMasterContainer.querySelector('.user-info__edit');
+// Форма
+const form = document.forms.new;
+
+// Данные профиля
+const profile = {
+	name: 'Илья Карпов',
+	about: 'Junior web-developer'
+};
 
 /*
  * Объявление функций
  */
 
 // Добавление карточки в разметку при загрузке страницы
-const loadedAddList = () => {
-	[...initialCards].forEach(item => {
+const loadedAddList = (cards) => {
+	cards.forEach(item => {
 		let { name, link } = item;
 
 		// В блок placesList добавляем создданный div placeCard
-		placesList.appendChild(createElementsList(name, link));
+		placesList.insertAdjacentHTML('beforeend', createElementsList(name, link));
 	});
+
+	userInfoName.textContent = profile.name;
+	userInfoJob.textContent = profile.about;
 };
 
 // Создание новых карточек
 const createElementsList = (nameValue, infoValue) => {
-	// Создание родительского контейнера -> "place-card"
-	const placeCard = document.createElement('div');
-	// Создание блока для фона карточки -> "place-card__image"
-	const placeCardImage = document.createElement('div');
-	// Создание кнопки удаления карточки -> "place-card__delete-icon"
-	const placeCardDeleteIcon = document.createElement('button');
-	// Создание контейнера для описания карточки -> "place-card__description"
-	const placeCardDescription = document.createElement('div');
-	// Создание заголовка карточки -> "place-card__name"
-	const placeCardName = document.createElement('h3');
-	// Создание кнопки like для карточки -> "place-card__like-icon"
-	const placeCardLikeIcon = document.createElement('button');
-
-	placeCard.classList.add('place-card');
-	placeCardImage.classList.add('place-card__image');
-	placeCardImage.style.backgroundImage = `url(${infoValue})`;
-	placeCardDeleteIcon.classList.add('place-card__delete-icon');
-	placeCardDescription.classList.add('place-card__description');
-	placeCardName.classList.add('place-card__name');
-	placeCardName.textContent = nameValue;
-	placeCardLikeIcon.classList.add('place-card__like-icon');
-
-	// В блок placeCard добавляем создданный div placeCardImage
-	placeCard.appendChild(placeCardImage);
-	// В блок placeCardImage добавляем создданный button placeCardDeleteIcon
-	placeCardImage.appendChild(placeCardDeleteIcon);
-	// В блок placeCard добавляем создданный div placeCardDescription
-	placeCard.appendChild(placeCardDescription);
-	// В блок placeCardDescription добавляем создданный h3 placeCardName
-	placeCardDescription.appendChild(placeCardName);
-	// В блок placeCardDescription добавляем создданный button placeCardLikeIcon
-	placeCardDescription.appendChild(placeCardLikeIcon);
-
-	// Подключаемся к кнопке закрытия фото
-	const popUpClose = rootMasterContainer.querySelector('.popup-image__close');
-	// Событие на открыть фото
-	placeCardImage.addEventListener('click', popUpImg);
-	// Событие на закрыть фото
-	popUpClose.addEventListener('click', popUpImg);
-
 	// Выводим список карточек
-	return placeCard;
+	return `
+	<div class="place-card">
+		<div class="place-card__image" style="background-image: url(${infoValue});">
+			<button class="place-card__delete-icon"></button>
+		</div>
+		<div class="place-card__description">
+			<h3 class="place-card__name">${nameValue}</h3>
+			<button class="place-card__like-icon"></button>
+		</div>
+	</div>
+	`;
 };
 
-// Добавления контента профиля в разметку
+// Изменение профиля в разметке "Имя", "О себе"
 const addProfile = (nameValue, infoValue) => {
-	const userInfoName = rootMasterContainer.querySelector('.user-info__name');
-	const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
-
 	userInfoName.textContent = nameValue;
 	userInfoJob.textContent = infoValue;
 };
@@ -136,9 +75,9 @@ const addList = (event) => {
 	let { name, info, submit } = form.elements;
 
 	// Если открылась форма для добавления карточки
-	if (submit.textContent === '+') {
+	if (submit.classList.contains('')) {
 		// В блок placesList добавляем создданный div placeCard
-		placesList.appendChild(createElementsList(name.value, info.value));
+		placesList.insertAdjacentHTML(createElementsList(name.value, info.value));
 	}
 	// Если открылась форма для изменения профиля
 	else if (submit.textContent === 'Сохранить') {
@@ -154,118 +93,38 @@ const addList = (event) => {
 	submit.setAttribute('disabled', true);
 };
 
+
+
 // Открытие и закрытие popup
 const popUpForm = (event) => {
-	const popUp = rootMasterContainer.querySelector('.popup'),
-		popUpButton = popUp.querySelector('.popup__button');
-
-	// Изминения контента popup
-	const popUpFormContent = ({ title, name, info, button }) => {
-		const popUpTitle = popUp.querySelector('.popup__title'),
-			popUpInputName = popUp.querySelector('.popup__input_type_name'),
-			popUpInputInfo = popUp.querySelector('.popup__input_type_info');
-
-		// Название формы
-		popUpTitle.textContent = title;
-		// Имя первого поля
-		popUpInputName.placeholder = name.placeholder;
-		if (event.target.textContent === 'Edit') {
-			const userInfoName = rootMasterContainer.querySelector('.user-info__name');
-			const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
-
-			popUpInputName.value = userInfoName.textContent;
-			popUpInputInfo.value = userInfoJob.textContent;
-			popUpButton.removeAttribute('disabled');
-		}
-
-		// Имя и атрибуты второго поля
-		popUpInputInfo.placeholder = info.placeholder;
-		// Условие добавления атрибута minlength
-		// В поле для ссылки он не нужен
-		if (info.minlength) {
-			popUpInputInfo.minLength = info.minlength;
-			popUpInputInfo.maxLength = info.maxlength;
-		} else {
-			popUpInputInfo.removeAttribute('minlength');
-			popUpInputInfo.removeAttribute('maxlength');
-		}
-		popUpInputInfo.type = info.type;
-		// Кнопка формы
-		popUpButton.textContent = button.name;
-		// Из-за того что контент кнопки "+", его нужно в несколько раз увеличивать
-		popUpButton.style.fontSize = `${button.fontSize}px`;
+	// Крестик - закрытие popup окна
+	const popupClose = rootMasterContainer.querySelectorAll('.popup__close');
+	
+	const popUpIsOpened = (popup) => {
+		const popUp = rootMasterContainer.querySelector(popup);
+		popUp.classList.toggle('popup_is-opened');
 	};
-
-	// Условие: если popup открыт больше не заходить в эти условия
-	if (!popUp.classList.contains('popup_is-opened')) {
-		// Если нужно отредактировать профиль
-		if (event.target.textContent === 'Edit') {
-
-			// Обьект данных для popup edit
-			const formEdit = {
-				title: 'Редактировать профиль',
-				name: {
-					placeholder: 'Имя'
-				},
-				info: {
-					placeholder: 'О себе',
-					type: 'text',
-					minlength: '2',
-					maxlength: '30'
-				},
-				button: {
-					name: 'Сохранить',
-					fontSize: 18
-				}
-			};
-
-			popUpFormContent(formEdit);
-
-		}
-
-		// Если нужно добавить новое место
-		if (event.target.textContent === '+') {
-
-			// Обьект данных для popup add
-			const formAdd = {
-				title: 'Новое место',
-				name: {
-					placeholder: 'Название'
-				},
-				info: {
-					placeholder: 'Ссылка на картинку',
-					type: 'url'
-				},
-				button: {
-					name: '+',
-					fontSize: 36
-				}
-			};
-
-			popUpFormContent(formAdd);
-		}
+	
+	// Если нажали "Редактировать профиль"
+	if (event.target.classList.contains('user-info__edit')) {
+		popUpIsOpened('.popup_edit-profile');
+	} 
+	// Если нажали "Дабавить новое место"
+	else if (event.target.classList.contains('user-info__add')) {
+		popUpIsOpened('.popup_add-item');
+	} 
+	// Если нажали закрыть popup
+	else if (event.target.classList.contains('popup__close')) {
+		popUpIsOpened('.popup_is-opened');
 	}
 
-
-	// Показываем или скрываем popup
-	rootMasterContainer.querySelector('.popup')
-		.classList.toggle('popup_is-opened');
-
-	// Условие: если popup открыт больше не заходить в эти условия
-	if (!popUp.classList.contains('popup_is-opened')) {
-		// Сброс формы
-		form.reset();
-		popUpButton.setAttribute('disabled', true);
-		const popUpErrorName = form.querySelector('.popup__error_name');
-		const popUpErrorInfo = form.querySelector('.popup__error_info');
-		// Сброс сообщений об ошибках (input)
-		if (popUpErrorName.textContent || popUpErrorInfo.textContent) {
-			popUpErrorName.textContent = null;
-			popUpErrorInfo.textContent = null;
+	// Находим крестик у которого открыт popup
+	[...popupClose].some((item, index) => {
+		if (item.closest('.popup_is-opened')) {
+			// Событие клика на кнопку - для закрытия формы
+			popupClose[index].addEventListener('click', popUpForm);
 		}
-	}
-	// Событие клика на кнопку - для закрытия формы
-	popupClose.addEventListener('click', popUpForm);
+	});
 	// Событие ввода в input - для условий формы
 	form.addEventListener('input', inputHandler);
 	// Событие отправки формы
@@ -311,9 +170,9 @@ const popUpImg = (event) => {
 
 // Обработчик события input
 const inputHandler = (event) => {
-	const { name, info, submit } = event.currentTarget.elements,
-		popUpErrorName = event.currentTarget.querySelector('.popup__error_name'),
-		popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
+	const { name, info, submit } = event.currentTarget.elements;
+	const popUpErrorName = event.currentTarget.querySelector('.popup__error_name');
+	const popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 
 	// Блокировка кнопки формы
 	const disabledButton = () => {
@@ -389,7 +248,7 @@ const inputHandler = (event) => {
  */
 
 // Событие загрузки страницы
-window.addEventListener('load', loadedAddList);
+window.addEventListener('load', loadedAddList(initialCards));
 // Событие клика на кнопку "+" - для открытия формы
 userInfoAdd.addEventListener('click', popUpForm);
 // Событие клика на кнопку "Edit" - для открытия формы

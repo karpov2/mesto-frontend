@@ -1,3 +1,6 @@
+@import url(./popup__button_font/popup__button_font_big.css);
+@import url(./popup__button_font/popup__button_font_small.css);
+
 .popup__button:disabled {
   border: 1px solid rgba(0, 0, 0, .2);
   background-color: transparent;
