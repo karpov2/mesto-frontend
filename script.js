@@ -256,7 +256,6 @@ const popUpForm = (event) => {
 		// Сброс формы
 		form.reset();
 		popUpButton.setAttribute('disabled', true);
-
 		const popUpErrorName = form.querySelector('.popup__error_name');
 		const popUpErrorInfo = form.querySelector('.popup__error_info');
 		// Сброс сообщений об ошибках (input)
@@ -265,7 +264,6 @@ const popUpForm = (event) => {
 			popUpErrorInfo.textContent = null;
 		}
 	}
-
 	// Событие клика на кнопку - для закрытия формы
 	popupClose.addEventListener('click', popUpForm);
 	// Событие ввода в input - для условий формы
@@ -380,7 +378,6 @@ const inputHandler = (event) => {
 				popUpErrorInfo.textContent = null;
 				noDisabledButton();
 			}
-
 		}
 	} catch (error) {
 		console.log('И такое тоже со всеми бывает');
