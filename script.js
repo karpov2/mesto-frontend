@@ -196,7 +196,7 @@ const inputHandler = (event) => {
 		tooShort: 'Должно быть от 2 до 30 символов',
 		typeMismatch: 'Введите URL'
 	};
-
+	
 	if (event.target === name) {
 		if (name.validity.valueMissing) {
 			popUpErrorName.textContent = lang.valueMissing;
@@ -225,6 +225,7 @@ const inputHandler = (event) => {
 	} else { // Блокировка кнопки формы
 		submit.setAttribute('disabled', true);
 	}
+
 };
 
 /*
