@@ -18,8 +18,8 @@
       <div class="user-info">
         <div class="user-info__photo"></div>
         <div class="user-info__data">
-          <h1 class="user-info__name"></h1>
-          <p class="user-info__job"></p>
+          <h1 class="user-info__name">Илья Карпов</h1>
+          <p class="user-info__job">Junior web-developer</p>
           <button class="button user-info__edit">Edit</button>
         </div>
         <button class="button user-info__add">+</button>
@@ -41,10 +41,10 @@
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
-        <form class="popup__form" name="new">
+        <form class="popup__form" name="formCards">
             <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название" autocomplete="off" minlength="2" maxlength="30" required>
             <div class="popup__error popup__error_name"></div>
-            <input type="url" name="info" class="popup__input popup__input_type_info" placeholder="Ссылка на картинку" autocomplete="off" required>
+            <input type="url" name="url" class="popup__input popup__input_type_info" placeholder="Ссылка на картинку" autocomplete="off" required>
             <div class="popup__error popup__error_info"></div>
             <button type="submit" name="submit" class="button popup__button popup__button_font_big" disabled>+</button>
         </form>
@@ -55,7 +55,7 @@
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Редактировать профиль</h3>
-        <form class="popup__form" name="new">
+        <form class="popup__form" name="formProfile">
             <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" autocomplete="off" minlength="2" maxlength="30" required>
             <div class="popup__error popup__error_name"></div>
             <input type="text" name="info" class="popup__input popup__input_type_info" placeholder="О себе" autocomplete="off" minlength="2" maxlength="30" required>

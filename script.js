@@ -20,13 +20,7 @@ const userInfoAdd = rootMasterContainer.querySelector('.user-info__add');
 // Кнопка "Edit" открытия popup окна
 const userInfoEdit = rootMasterContainer.querySelector('.user-info__edit');
 // Форма
-const form = document.forms.new;
-
-// Данные профиля
-const profile = {
-	name: 'Илья Карпов',
-	about: 'Junior web-developer'
-};
+const {formCards, formProfile} = document.forms;
 
 /*
  * Объявление функций
@@ -40,9 +34,6 @@ const loadedAddList = (cards) => {
 		// В блок placesList добавляем создданный div placeCard
 		placesList.insertAdjacentHTML('beforeend', createElementsList(name, link));
 	});
-
-	userInfoName.textContent = profile.name;
-	userInfoJob.textContent = profile.about;
 };
 
 // Создание новых карточек
@@ -62,38 +53,45 @@ const createElementsList = (nameValue, infoValue) => {
 };
 
 // Изменение профиля в разметке "Имя", "О себе"
-const addProfile = (nameValue, infoValue) => {
+const createElementsProfile = (nameValue, infoValue) => {
 	userInfoName.textContent = nameValue;
 	userInfoJob.textContent = infoValue;
 };
 
-// Добавление карточки в разметку
-const addList = (event) => {
+// Обработка формы профиля
+const addProfile = (event) => {
 	event.preventDefault();
 
 	// Имя в форме
-	let { name, info, submit } = form.elements;
+	let { name, info, submit } = formProfile.elements;
 
-	// Если открылась форма для добавления карточки
-	if (submit.classList.contains('')) {
-		// В блок placesList добавляем создданный div placeCard
-		placesList.insertAdjacentHTML(createElementsList(name.value, info.value));
-	}
-	// Если открылась форма для изменения профиля
-	else if (submit.textContent === 'Сохранить') {
-		// В блок placesList добавляем создданный div placeCard
-		addProfile(name.value, info.value);
-	}
+	createElementsProfile(name.value, info.value);
 
 	// Сброс формы
-	form.reset();
+	formProfile.reset();
 	// Закрытие popup по срабатыванию
 	popUpForm();
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
 };
 
+//Обработка формы добавления нового места
+const addList = (event) => {
+	event.preventDefault();
 
+	// Имя в форме
+	let { name, url, submit } = formCards.elements;
+
+	// В блок placesList добавляем создданный div placeCard
+	placesList.insertAdjacentHTML('beforeend', createElementsList(name.value, url.value));
+
+	// Сброс формы
+	formCards.reset();
+	// Закрытие popup по срабатыванию
+	popUpForm();
+	// Снова блокируем кнопку формы
+	submit.setAttribute('disabled', true);
+};
 
 // Открытие и закрытие popup
 const popUpForm = (event) => {
@@ -112,10 +110,17 @@ const popUpForm = (event) => {
 	// Если нажали "Дабавить новое место"
 	else if (event.target.classList.contains('user-info__add')) {
 		popUpIsOpened('.popup_add-item');
+		// Событие отправки формы
+		formCards.addEventListener('submit', addList);
 	} 
 	// Если нажали закрыть popup
 	else if (event.target.classList.contains('popup__close')) {
 		popUpIsOpened('.popup_is-opened');
+	}
+	// Закрытие после отправки popup
+	else if (event.target.classList.contains('button')) {
+		popUpIsOpened('.popup_is-opened');
+		console.log('Отправил и закрыл');
 	}
 
 	// Находим крестик у которого открыт popup
@@ -126,9 +131,9 @@ const popUpForm = (event) => {
 		}
 	});
 	// Событие ввода в input - для условий формы
-	form.addEventListener('input', inputHandler);
+	formProfile.addEventListener('input', inputHandler);
 	// Событие отправки формы
-	form.addEventListener('submit', addList);
+	formProfile.addEventListener('submit', addList);
 };
 
 // Обработчик клика по сердечку
