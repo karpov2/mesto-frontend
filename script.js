@@ -191,11 +191,17 @@ const inputHandler = (event) => {
 	const popUpErrorName = event.currentTarget.querySelector('.popup__error_name');
 	const popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 	
+	const lang = {
+		valueMissing: 'Это обязательное поле',
+		tooShort: 'Должно быть от 2 до 30 символов',
+		typeMismatch: 'Введите URL'
+	};
+
 	if (event.target === name) {
 		if (name.validity.valueMissing) {
-			popUpErrorName.textContent = 'Это обязательное поле';
+			popUpErrorName.textContent = lang.valueMissing;
 		} else if (name.validity.tooShort) {
-			popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
+			popUpErrorName.textContent = lang.tooShort;
 		} else {
 			popUpErrorName.textContent = null;
 		}
@@ -203,11 +209,11 @@ const inputHandler = (event) => {
 
 	if (event.target === info) {
 		if (info.validity.valueMissing) {
-			popUpErrorInfo.textContent = 'Это обязательное поле';
+			popUpErrorInfo.textContent = lang.valueMissing;
 		} else if (info.validity.tooShort) {
-			popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+			popUpErrorInfo.textContent = lang.tooShort;
 		} else if(info.validity.typeMismatch) {
-			popUpErrorInfo.textContent = 'Введите URL';
+			popUpErrorInfo.textContent = lang.typeMismatch;
 		} else {
 			popUpErrorInfo.textContent = null;
 		}
