@@ -8,17 +8,28 @@ const rootMasterContainer = document.querySelector('.root');
 // Список карточек
 const placesList = rootMasterContainer.querySelector('.places-list');
 
-// Профиль
+// Всплывающее фото
+const popUpImage = rootMasterContainer.querySelector('.popup-image');
+const popUpAddImage = popUpImage.querySelector('.popup-image__img');
+const popUpImageClose = popUpImage.querySelector('.popup-image__close');
+
+// Кнопка "Edit" открытия popup окна
+const userInfoEdit = rootMasterContainer.querySelector('.user-info__edit');
+// Форма для редактирования профиля
+const popUpProfileItem = rootMasterContainer.querySelector('.popup_edit-profile');
+const popUpProfileClose = popUpProfileItem.querySelector('.popup__close');
+// const popUpProfileButton = popUpProfileItem.querySelector('.popup__button');
+// Профиль: "Имя" и "О себе"
 const userInfoName = rootMasterContainer.querySelector('.user-info__name');
 const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
 
-// Подключаемся к кнопке закрытия фото
-const popUpImageClose = placesList.querySelector('.popup-image__close');
-
 // Кнопка "+" открытия popup окна
 const userInfoAdd = rootMasterContainer.querySelector('.user-info__add');
-// Кнопка "Edit" открытия popup окна
-const userInfoEdit = rootMasterContainer.querySelector('.user-info__edit');
+// Форма для добавления нового места
+const popUpAddItem = rootMasterContainer.querySelector('.popup_add-item');
+const popUpAddClose = popUpAddItem.querySelector('.popup__close');
+// const popUpAddButton = popUpAddItem.querySelector('.popup__button');
+
 // Форма
 const {formCards, formProfile} = document.forms;
 
@@ -62,7 +73,7 @@ const createElementsProfile = (nameValue, infoValue) => {
 const addProfile = (event) => {
 	event.preventDefault();
 
-	// Имя в форме
+	// Элементы формы
 	let { name, info, submit } = formProfile.elements;
 
 	createElementsProfile(name.value, info.value);
@@ -70,7 +81,7 @@ const addProfile = (event) => {
 	// Сброс формы
 	formProfile.reset();
 	// Закрытие popup по срабатыванию
-	popUpForm();
+	openPopUpFormProfile();
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
 };
@@ -79,61 +90,65 @@ const addProfile = (event) => {
 const addList = (event) => {
 	event.preventDefault();
 
-	// Имя в форме
-	let { name, url, submit } = formCards.elements;
+	// Элементы формы
+	let { name, info, submit } = formCards.elements;
 
-	// В блок placesList добавляем создданный div placeCard
-	placesList.insertAdjacentHTML('beforeend', createElementsList(name.value, url.value));
+	// В блок placesList добавляем создданный div place-card
+	placesList.insertAdjacentHTML('beforeend', createElementsList(name.value, info.value));
 
 	// Сброс формы
 	formCards.reset();
 	// Закрытие popup по срабатыванию
-	popUpForm();
+	openPopUpFormCards();
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
 };
 
 // Открытие и закрытие popup
-const popUpForm = (event) => {
-	// Крестик - закрытие popup окна
-	const popupClose = rootMasterContainer.querySelectorAll('.popup__close');
+// Добавление нового места
+const openPopUpFormCards = (event) => {
+	popUpAddItem.classList.toggle('popup_is-opened');
 	
-	const popUpIsOpened = (popup) => {
-		const popUp = rootMasterContainer.querySelector(popup);
-		popUp.classList.toggle('popup_is-opened');
-	};
-	
-	// Если нажали "Редактировать профиль"
-	if (event.target.classList.contains('user-info__edit')) {
-		popUpIsOpened('.popup_edit-profile');
-	} 
-	// Если нажали "Дабавить новое место"
-	else if (event.target.classList.contains('user-info__add')) {
-		popUpIsOpened('.popup_add-item');
-		// Событие отправки формы
-		formCards.addEventListener('submit', addList);
-	} 
-	// Если нажали закрыть popup
-	else if (event.target.classList.contains('popup__close')) {
-		popUpIsOpened('.popup_is-opened');
-	}
-	// Закрытие после отправки popup
-	else if (event.target.classList.contains('button')) {
-		popUpIsOpened('.popup_is-opened');
-		console.log('Отправил и закрыл');
+	// Событие отправки формы
+	formCards.addEventListener('submit', addList);
+	// Событие клика на кнопку - для закрытия формы
+	popUpAddClose.addEventListener('click', openPopUpFormCards);
+	// Событие ввода в input - для условий формы
+	formCards.addEventListener('input', inputHandler);
+
+	if (event.target === popUpAddClose) {
+		// Сброс формы
+		formCards.reset();
+		formCards.querySelector('.popup__error_name').textContent = null;
+		formCards.querySelector('.popup__error_info').textContent = null;
 	}
 
-	// Находим крестик у которого открыт popup
-	[...popupClose].some((item, index) => {
-		if (item.closest('.popup_is-opened')) {
-			// Событие клика на кнопку - для закрытия формы
-			popupClose[index].addEventListener('click', popUpForm);
-		}
-	});
+};
+
+// Открытие и закрытие popup
+// Редактирование профиля
+const openPopUpFormProfile = (event) => {
+	popUpProfileItem.classList.toggle('popup_is-opened');
+
+	// Элементы формы
+	const { name, info, submit} = formProfile.elements;
+	name.value = userInfoName.textContent;
+	info.value = userInfoJob.textContent;
+
+	submit.removeAttribute('disabled'); // вызвать функцию
+	
+	// Событие отправки формы
+	formProfile.addEventListener('submit', addProfile);
+	// Событие клика на кнопку - для закрытия формы
+	popUpProfileClose.addEventListener('click', openPopUpFormProfile);
 	// Событие ввода в input - для условий формы
 	formProfile.addEventListener('input', inputHandler);
-	// Событие отправки формы
-	formProfile.addEventListener('submit', addList);
+
+	if (event.target === popUpProfileClose) {
+		// Сброс ошибок валидации
+		formProfile.querySelector('.popup__error_name').textContent = null;
+		formProfile.querySelector('.popup__error_info').textContent = null;
+	}
 };
 
 // Обработчик клика по сердечку
@@ -153,22 +168,19 @@ const likeVsRemove = (event) => {
 // Открываем фото или закрываем
 // Добавляем конкретное фото
 const popUpImg = (event) => {
-	const popUp = rootMasterContainer.querySelector('.popup-image');
-	const popUpImage = popUp.querySelector('.popup-image__img');
-
 	// Открыть или закрыть фото
 	const popUpIsOpened = () => {
-		popUp.classList.toggle('popup-image_is-opened');
+		popUpImage.classList.toggle('popup-image_is-opened');
 	};
 
 	if (event.target.classList.contains('place-card__image')) {
 		// Подставить конкретное фото
-		popUpImage.src = event.target.style.backgroundImage.slice(5, -2);
+		popUpAddImage.src = event.target.style.backgroundImage.slice(5, -2);
 
-		// Открыть или закрыть фото
+		// Открыть фото
 		popUpIsOpened();
-	} else if (event.target.classList.contains('popup-image__close')) {
-		// Открыть или закрыть фото
+	} else if (event.target === popUpImageClose) {
+		// Закрыть фото
 		popUpIsOpened();
 	}
 };
@@ -178,73 +190,34 @@ const inputHandler = (event) => {
 	const { name, info, submit } = event.currentTarget.elements;
 	const popUpErrorName = event.currentTarget.querySelector('.popup__error_name');
 	const popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
-
-	// Блокировка кнопки формы
-	const disabledButton = () => {
-		submit.setAttribute('disabled', true);
-	};
-
-	// Разблокировка кнопки формы
-	const noDisabledButton = () => {
-		if (info.validity.valid && name.validity.valid) {
-			submit.removeAttribute('disabled');
+	
+	if (event.target === name) {
+		if (name.validity.valueMissing) {
+			popUpErrorName.textContent = 'Это обязательное поле';
+		} else if (name.validity.tooShort) {
+			popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
+		} else {
+			popUpErrorName.textContent = null;
 		}
-	};
-
-	try {
-		if (event.target === name) {
-			// Проверка на валидность атрибутам и типу
-			if (!name.validity.valid) {
-				disabledButton();
-
-				if (name.value.length === 0) {
-					popUpErrorName.textContent = 'Это обязательное поле';
-				} else if (name.value.length < 2) {
-					popUpErrorName.textContent = 'Должно быть от 2 до 30 символов';
-				}
-
-
-			} else {
-				popUpErrorName.textContent = null;
-				noDisabledButton();
-			}
-		}
-	} catch (error) {
-		console.log('Со всеми бывает');
 	}
 
-	try {
-		if (event.target === info) {
-			// Проверка на валидность атрибутам и типу
-			if (!info.validity.valid) {
-				disabledButton();
-
-				// Если текствое поле (ссылке это сообщение не нужно)
-				if (info.type === 'text') {
-					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
-				}
-
-				// Ссылка ничинаться с https/http
-				// Проверяем, содержит ли ссылка протокол
-				else if (info.type === 'url') {
-					['https', 'http'].forEach(item => {
-						if (!info.value.includes(item)) {
-							popUpErrorInfo.textContent = 'Ссылка должна начинаться на https/http';
-						} else {
-							popUpErrorInfo.textContent = null;
-						}
-					});
-				}
-
-				if (info.value.length === 0) popUpErrorInfo.textContent = 'Это обязательное поле';
-
-			} else {
-				popUpErrorInfo.textContent = null;
-				noDisabledButton();
-			}
+	if (event.target === info) {
+		if (info.validity.valueMissing) {
+			popUpErrorInfo.textContent = 'Это обязательное поле';
+		} else if (info.validity.tooShort) {
+			popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
+		} else if(info.validity.typeMismatch) {
+			popUpErrorInfo.textContent = 'Введите URL';
+		} else {
+			popUpErrorInfo.textContent = null;
 		}
-	} catch (error) {
-		console.log('И такое тоже со всеми бывает');
+	}
+
+	// Разблокировка кнопки формы
+	if (name.validity.valid && info.validity.valid) {
+		submit.removeAttribute('disabled');
+	} else { // Блокировка кнопки формы
+		submit.setAttribute('disabled', true);
 	}
 };
 
@@ -255,11 +228,14 @@ const inputHandler = (event) => {
 // Событие загрузки страницы
 window.addEventListener('load', loadedAddList(initialCards));
 // Событие клика на кнопку "+" - для открытия формы
-userInfoAdd.addEventListener('click', popUpForm);
+userInfoAdd.addEventListener('click', openPopUpFormCards);
 // Событие клика на кнопку "Edit" - для открытия формы
-userInfoEdit.addEventListener('click', popUpForm);
+userInfoEdit.addEventListener('click', openPopUpFormProfile);
 // Событие клика на кнопку - like
 placesList.addEventListener('click', likeVsRemove);
+// Событие клика по фото
+placesList.addEventListener('click', popUpImg);
+popUpImageClose.addEventListener('click', popUpImg);
 
 
 
@@ -346,5 +322,5 @@ placesList.addEventListener('click', likeVsRemove);
  *     https://developer.mozilla.org/ru/docs/Web/API/DocumentFragment - здесь можно почитать о данном методе и его кейсах.
  *     https://developer.mozilla.org/ru/docs/Web/HTML/Element/template - очень интересный тег, его также можно использовать для создание компонентов.
  *
- *
+ * Илья: исправил
  */
