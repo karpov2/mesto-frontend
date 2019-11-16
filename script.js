@@ -33,6 +33,12 @@ const popUpAddClose = popUpAddItem.querySelector('.popup__close');
 // Форма
 const {formCards, formProfile} = document.forms;
 
+const lang = {
+	valueMissing: 'Это обязательное поле',
+	tooShort: 'Должно быть от 2 до 30 символов',
+	typeMismatch: 'Введите URL'
+};
+
 /*
  * Объявление функций
  */
@@ -81,7 +87,7 @@ const addProfile = (event) => {
 	// Сброс формы
 	formProfile.reset();
 	// Закрытие popup по срабатыванию
-	openPopUpFormProfile();
+	openPopUpFormProfile(event);
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
 };
@@ -99,7 +105,7 @@ const addList = (event) => {
 	// Сброс формы
 	formCards.reset();
 	// Закрытие popup по срабатыванию
-	openPopUpFormCards();
+	openPopUpFormCards(event);
 	// Снова блокируем кнопку формы
 	submit.setAttribute('disabled', true);
 };
@@ -191,12 +197,6 @@ const inputHandler = (event) => {
 	const popUpErrorName = event.currentTarget.querySelector('.popup__error_name');
 	const popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
 	
-	const lang = {
-		valueMissing: 'Это обязательное поле',
-		tooShort: 'Должно быть от 2 до 30 символов',
-		typeMismatch: 'Введите URL'
-	};
-	
 	if (event.target === name) {
 		if (name.validity.valueMissing) {
 			popUpErrorName.textContent = lang.valueMissing;
@@ -252,82 +252,48 @@ popUpImageClose.addEventListener('click', popUpImg);
  *
  * Правильно что используете event.target
  *
- * Можно лучше. Не обязательно постоянно использовать addEventListener('click' что-бы повесить
- * На один и тот же элемент несколько раз. Достаточно применить один раз и реализовать там весь функционал
- *
- * Можно лучше. То что находится в addEventListener необходимо вынести в отдельный метод класса
- * Вы в будущем можете переиспользовать эти методы по необходимости
- * Имеется ввиду, что код из коллбэк функции addEventListener лучше вынести в отдельную функцию, чтобы это можно было переиспользовать
- *
- * Можно лучше: обычно названия, для примера 'Должно быть от 2 до 30 символов'
- * выносят в отдельный объект. Допустим может появится задача сделать многоязычный сайт
- * Для примера : const lang = { validationLenght: 'Должно быть от 2 до 30 символов' }
- *
- * Исправить:
- * Зачем Вы используете стрелочные функции, внути стрелочных функций и вообще стрелочные функции.
- * Они будут работать в современных браузерах, но не будут работать в  ES5. Переписать.
- * Вынести функции из функций
- * Сделать более простые функции
- *
- * Такие моменты убрать упростить
- * 	if (info.type === 'text') {
-					if (info.value.length < 2) popUpErrorInfo.textContent = 'Должно быть от 2 до 30 символов';
-				}
+ * Хорошо, вы многое исправили но надо исправить ошибку в консоли.
+ * ПРи изменении имени в консоли возникает ошибка
+ *script.js:147 Uncaught TypeError: Cannot read property 'target' of undefined
+    at openPopUpFormProfile (script.js:147)
+	at HTMLFormElement.addProfile (script.js:84)
 
- * Функция const loadedAddList = () => {
-	переписать под ES5. а в качестве параметров должен приниматься массив объектов
+	-------------
+	Илья: хех, не увидел - передал функциям event
+	-------------
+ *
+ * При добавлении карточки
+ * script.js:119 Uncaught TypeError: Cannot read property 'target' of undefined
+    at openPopUpFormCards (script.js:119)
+	at HTMLFormElement.addList (script.js:102)
 
+	-------------
+	Илья: хех, не увидел - передал функциям event
+	-------------
  *
- * Манипулировать классами стилей а не стилями, здесь только логика
- * 		popUpButton.style.fontSize = `${button.fontSize}px`;
+ *  lang вынесите за функцию в самый вверх
+ * 
+ *  -------------
+	Илья: вынес lang
+	-------------
  *
- * В этом месте вы предлагаете не менять имя кнопки, иначе кнопка перестанет работать
- * 		if (event.target.textContent === 'Edit') {
- * Привязать проверку к lassList.contains
- * Это касается здесь
- * 	if (submit.textContent === '+')
- * и здесь
- * (submit.textContent === 'Сохранить')
+ * Вынесите за функцию слушатель
+ * 	popUpAddClose.addEventListener('click', openPopUpFormCards);
+ * вы пытаетесь вызвать функцию в которой вешаете слушатель
+ * 
+ *  -------------
+	Илья: получается замыкание? что плохого?
+	Я вызываю слушатель внутри этой вынкции - потому что он нужен только после вызова этой вынкции.
+	Функция открывает popUp, и слушатель нужен - что бы закрыть popUp
+	Таких слушателей 2 на каждую форму popUp (вы написали про 1)
+
+	Вы пишите замечание - но не обьясняете подробнее
+	Если эти событие точно нужно вынести отдельно (напишите почему), пока я оставлю так
+	-------------
  *
- * Функцию разбить на много небольших
- * const inputHandler = (event) => {
- * Можно долго отлавливать ошибки если они будут
+ * // Создание новых карточек очень хорошо сделали, мне понравилось
+ * const createElementsList = (nameValue, infoValue) => {
  *
  *
  *
- * initialCards в отдельный файл, меньше строк, больше понимание,
- * подключить его можно через  <script src="js/initialCards.js"></script>
- *
- * Про создание карточки.
- * Вы можете реализовать функцию, которая сразу же возвращает “кусок” разметки. Это решает проблему постоянного криэйта DOM-элементов.
-       cardTemplate() {
-           return `<div class="place-card">
-                             Здесь вся ваша разметка карточки.
-                   </div>`
-       };
- * Вы можете реализовать функцию, которая сразу же возвращает “кусок” разметки. Это решает проблему постоянного криэйта DOM-элементов.
-       cardTemplate() {
-           return `<div class="place-card">
-                             Здесь вся ваша разметка карточки.
-                   </div>`
-       };
- * Обратите внимание на использование backtick ` - это новый нововведение ES6, в нем можно корректно переносить строки и вставлять внутрь разметки JS-код.
- * Конкретнее про вставку JS-кода. Сейчас вы используете способ стандарта ES5 - ' + card.link + ‘. Грузно, не правда ли?
- * В ES6, используя ` бэктик, появляется возможность интерполяции `Строковое значение разметки ${console.log(‘А здесь уже JavaScript’)} `;
- * Обладая данными знаниями, возникает идея оптимизации createCard - теперь эта функция по прежнему принимает card, содержащую нужные параметры, которые
- * непосредственно вставляются в разметку.
-       cardTemplate(string) {
-           return `<div class="place-card">
-                             ${string}
-                   </div>`
-       };
- *  Этот кусок разметки в дальнейшем можно вставить в DOM, воспользовавшись методом insertAdjacentHTML().
- *  Однако такой способ вставки пользовательских строк является менее безопасным
- *  https://developer.mozilla.org/ru/docs/Web/API/Element/insertAdjacentHTML
- *
- * 2. Путь оптимизации уже текущего кода с использованием documentFragment и уменьшении работы над DOM.
- *     https://developer.mozilla.org/ru/docs/Web/API/DocumentFragment - здесь можно почитать о данном методе и его кейсах.
- *     https://developer.mozilla.org/ru/docs/Web/HTML/Element/template - очень интересный тег, его также можно использовать для создание компонентов.
- *
- * Илья: исправил
  */
