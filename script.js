@@ -246,7 +246,8 @@ popUpImageClose.addEventListener('click', popUpImg);
 
 
 
-/**
+/*
+
 Здравствуйте
 
 Правильно что используете event.target
