@@ -31,7 +31,7 @@ const popUpAddClose = popUpAddItem.querySelector('.popup__close');
 // const popUpAddButton = popUpAddItem.querySelector('.popup__button');
 
 // Форма
-const {formCards, formProfile} = document.forms;
+const { formCards, formProfile } = document.forms;
 
 const lang = {
 	valueMissing: 'Это обязательное поле',
@@ -114,7 +114,6 @@ const addList = (event) => {
 // Добавление нового места
 const openPopUpFormCards = (event) => {
 	popUpAddItem.classList.toggle('popup_is-opened');
-	
 	// Событие отправки формы
 	formCards.addEventListener('submit', addList);
 	// Событие клика на кнопку - для закрытия формы
@@ -137,12 +136,12 @@ const openPopUpFormProfile = (event) => {
 	popUpProfileItem.classList.toggle('popup_is-opened');
 
 	// Элементы формы
-	const { name, info, submit} = formProfile.elements;
+	const { name, info, submit } = formProfile.elements;
 	name.value = userInfoName.textContent;
 	info.value = userInfoJob.textContent;
 
 	submit.removeAttribute('disabled'); // вызвать функцию
-	
+
 	// Событие отправки формы
 	formProfile.addEventListener('submit', addProfile);
 	// Событие клика на кнопку - для закрытия формы
@@ -196,7 +195,7 @@ const inputHandler = (event) => {
 	const { name, info, submit } = event.currentTarget.elements;
 	const popUpErrorName = event.currentTarget.querySelector('.popup__error_name');
 	const popUpErrorInfo = event.currentTarget.querySelector('.popup__error_info');
-	
+
 	if (event.target === name) {
 		if (name.validity.valueMissing) {
 			popUpErrorName.textContent = lang.valueMissing;
@@ -212,7 +211,7 @@ const inputHandler = (event) => {
 			popUpErrorInfo.textContent = lang.valueMissing;
 		} else if (info.validity.tooShort) {
 			popUpErrorInfo.textContent = lang.tooShort;
-		} else if(info.validity.typeMismatch) {
+		} else if (info.validity.typeMismatch) {
 			popUpErrorInfo.textContent = lang.typeMismatch;
 		} else {
 			popUpErrorInfo.textContent = null;
@@ -248,40 +247,40 @@ popUpImageClose.addEventListener('click', popUpImg);
 
 
 /**
- * Здравствуйте
- *
- * Правильно что используете event.target
- *
- * Хорошо, вы многое исправили но надо исправить ошибку в консоли.
- * ПРи изменении имени в консоли возникает ошибка
- *script.js:147 Uncaught TypeError: Cannot read property 'target' of undefined
+Здравствуйте
+
+Правильно что используете event.target
+
+Хорошо, вы многое исправили но надо исправить ошибку в консоли.
+ПРи изменении имени в консоли возникает ошибка
+script.js:147 Uncaught TypeError: Cannot read property 'target' of undefined
     at openPopUpFormProfile (script.js:147)
 	at HTMLFormElement.addProfile (script.js:84)
 
 	-------------
 	Илья: хех, не увидел - передал функциям event
 	-------------
- *
- * При добавлении карточки
- * script.js:119 Uncaught TypeError: Cannot read property 'target' of undefined
+
+При добавлении карточки
+script.js:119 Uncaught TypeError: Cannot read property 'target' of undefined
     at openPopUpFormCards (script.js:119)
 	at HTMLFormElement.addList (script.js:102)
 
 	-------------
 	Илья: хех, не увидел - передал функциям event
 	-------------
- *
- *  lang вынесите за функцию в самый вверх
- * 
- *  -------------
+
+ lang вынесите за функцию в самый вверх
+
+	-------------
 	Илья: вынес lang
 	-------------
- *
- * Вынесите за функцию слушатель
- * 	popUpAddClose.addEventListener('click', openPopUpFormCards);
- * вы пытаетесь вызвать функцию в которой вешаете слушатель
- * 
- *  -------------
+
+Вынесите за функцию слушатель
+popUpAddClose.addEventListener('click', openPopUpFormCards);
+вы пытаетесь вызвать функцию в которой вешаете слушатель
+
+	-------------
 	Илья: получается замыкание? что плохого?
 	Я вызываю слушатель внутри этой вынкции - потому что он нужен только после вызова этой вынкции.
 	Функция открывает popUp, и слушатель нужен - что бы закрыть popUp
@@ -290,10 +289,42 @@ popUpImageClose.addEventListener('click', popUpImg);
 	Вы пишите замечание - но не обьясняете подробнее
 	Если эти событие точно нужно вынести отдельно (напишите почему), пока я оставлю так
 	-------------
- *
- * // Создание новых карточек очень хорошо сделали, мне понравилось
- * const createElementsList = (nameValue, infoValue) => {
- *
- *
- *
- */
+
+// Создание новых карточек очень хорошо сделали, мне понравилось
+const createElementsList = (nameValue, infoValue) => {
+
+Снова здравствуйте
+Спасибо что исправили ошибки. 
+
+   --- Вы пишите замечание - но не обьясняете подробнее
+   --- Если эти событие точно нужно вынести отдельно (напишите почему), пока я оставлю так
+Потому что вы код пишите не только для себя, но и для людей. Работая в большой команде над большим проектом
+Вы должны будете не только писать рабочий код, но и понятный другим участникам команды, а так 
+же людям которые после вас будут этот код поддерживать. В текущие ситуации вы создаёте дополнительную путаницу, 
+вешая слушатель в функцию которую вы же и вызываете. Повешайте на родителя один раз и используйте постоянно
+
+Привёл пример кода адаптированный под ваш код. Не назову его идеальным, так как и структуру HTML кода надо менять
+Popup для добавления фото я бы перенёс в root__section
+
+Работа принимается
+
+// пример кода с событиями для улучшения 
+function myFuncPopup(e) {
+	if (e.target.closest('.button user-info__edit') || e.target.closest('.user-info__edit')) {
+		console.log('здесь вызов какой то функции редактирования профиля');
+	}
+
+	if (e.target.closest('.user-info__add')) {
+		console.log('здесь вызов какой то функции для добавления фото');
+	}
+
+	if (e.target.closest('.popup__close') || e.target.closest('.popup__button')) {
+		console.log('здесь вызов какой то другой функции, ничего здесь не городим, просто вызываем');
+
+	}
+};
+
+const placesCard = document.querySelector('.root');
+placesCard.addEventListener('click', myFuncPopup);
+
+*/
