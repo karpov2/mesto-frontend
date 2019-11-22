@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <title>Конструктор плейлистов</title>
+</head>
+
+<body>
+    <header class="header">
+        <img src="https://pictures.s3.yandex.net/frontend-developer/dom_bom/logo.svg" alt="" class="header__logo">
+        <p class="header__logo-sub">Конструктор плейлистов</p>
+    </header>
+    <main class="container">
+        <div class="cover">
+            <div class="cover__image"></div>
+            <h1 class="cover__heading">Плейлист</h1>
+        </div>
+        <div class="block">
+            <form name="add">
+                <h3>Добавить песню</h3>
+                <div class="input">
+                    <input type="text" name="title" placeholder="Название" class="input__text input__text_title">
+                    <input type="text" name="artist" placeholder="Исполнитель" class="input__text input__text_artist">
+                    <button class="input__btn input__btn_add">
+                        Добавить
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="block">
+            <h3>Добавленные</h3>
+            <div class="no-songs">
+                <p class="no-songs__text">Нет добавленных песен</p>
+            </div>
+            <div class="songs-container">
+
+            </div>
+            <div class="input__submit">
+                <button class="input__btn input__btn_reset">
+                    Очистить плейлист
+                </button>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>

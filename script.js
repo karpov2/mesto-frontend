@@ -7,6 +7,7 @@ const rootMasterContainer = document.querySelector('.root');
 
 // Список карточек
 const placesList = rootMasterContainer.querySelector('.places-list');
+const placeCard = placesList.querySelectorAll('.place-card');
 
 // Всплывающее фото
 const popUpImage = rootMasterContainer.querySelector('.popup-image');
@@ -18,7 +19,6 @@ const userInfoEdit = rootMasterContainer.querySelector('.user-info__edit');
 // Форма для редактирования профиля
 const popUpProfileItem = rootMasterContainer.querySelector('.popup_edit-profile');
 const popUpProfileClose = popUpProfileItem.querySelector('.popup__close');
-// const popUpProfileButton = popUpProfileItem.querySelector('.popup__button');
 // Профиль: "Имя" и "О себе"
 const userInfoName = rootMasterContainer.querySelector('.user-info__name');
 const userInfoJob = rootMasterContainer.querySelector('.user-info__job');
@@ -28,7 +28,6 @@ const userInfoAdd = rootMasterContainer.querySelector('.user-info__add');
 // Форма для добавления нового места
 const popUpAddItem = rootMasterContainer.querySelector('.popup_add-item');
 const popUpAddClose = popUpAddItem.querySelector('.popup__close');
-// const popUpAddButton = popUpAddItem.querySelector('.popup__button');
 
 // Форма
 const { formCards, formProfile } = document.forms;
@@ -43,31 +42,109 @@ const lang = {
  * Объявление функций
  */
 
-// Добавление карточки в разметку при загрузке страницы
-const loadedAddList = (cards) => {
-	cards.forEach(item => {
-		let { name, link } = item;
+// Это класс, создающий карточку
+class Card {
+	constructor() {
+		console.log('Card constructor');
+	}
 
-		// В блок placesList добавляем создданный div placeCard
-		placesList.insertAdjacentHTML('beforeend', createElementsList(name, link));
-	});
-};
+	// Лайк карточки 
+	like() {
+		event.target.classList.toggle('place-card__like-icon_liked');
+	}
+
+	// Удаление карточки 
+	remove() {
+		placesList.removeChild(event.target.closest('.place-card'));
+	}
+
+	// Он будет создавать DOM-элемент карточки
+	create(nameValue, infoValue) {
+		console.log('Card create');
+		// Выводим список карточек
+		return `
+		<div class="place-card">
+			<div class="place-card__image" style="background-image: url(${infoValue});">
+				<button class="place-card__delete-icon"></button>
+			</div>
+			<div class="place-card__description">
+				<h3 class="place-card__name">${nameValue}</h3>
+				<button class="place-card__like-icon"></button>
+			</div>
+		</div>
+		`;
+	}
+}
+
+// Это класс для хранения и отрисовки карточек
+class CardList {
+	// Метод constructor этого класса должен принимать два параметра:
+	// DOM-элемент — контейнер, куда нужно складывать карточки;
+	// Массив карточек, которые будут на странице при загрузке.
+	constructor(domCard, arrayCard) {
+		this.container = domCard;
+		this.card = arrayCard;
+		console.log('CardList constructor');
+	}
+
+	// addCard для добавления карточки в список
+	addCard() {
+
+	}
+
+	// render для отрисовки карточек при загрузке страницы
+	render(cards) {
+		const cardElement = new Card();
+
+		cards.forEach(item => {
+			const { name, link } = item;
+
+			// В блок placesList добавляем создданный div placeCard
+			this.container.insertAdjacentHTML('beforeend', cardElement.create(name, link));
+		});
+	}
+}
+
+const cardList = new CardList(placesList, placeCard);
+
+// Это класс для всплывающего окна
+class Popup {
+	// Показывать попап
+	open() {
+
+	}
+
+	// Скрывать попап
+	close() {
+
+	}
+}
+
+// Добавление карточки в разметку при загрузке страницы
+// const loadedAddList = (cards) => {
+// 	cards.forEach(item => {
+// 		let { name, link } = item;
+
+// 		// В блок placesList добавляем создданный div placeCard
+// 		placesList.insertAdjacentHTML('beforeend', createElementsList(name, link));
+// 	});
+// };
 
 // Создание новых карточек
-const createElementsList = (nameValue, infoValue) => {
-	// Выводим список карточек
-	return `
-	<div class="place-card">
-		<div class="place-card__image" style="background-image: url(${infoValue});">
-			<button class="place-card__delete-icon"></button>
-		</div>
-		<div class="place-card__description">
-			<h3 class="place-card__name">${nameValue}</h3>
-			<button class="place-card__like-icon"></button>
-		</div>
-	</div>
-	`;
-};
+// const createElementsList = (nameValue, infoValue) => {
+// 	// Выводим список карточек
+// 	return `
+// 	<div class="place-card">
+// 		<div class="place-card__image" style="background-image: url(${infoValue});">
+// 			<button class="place-card__delete-icon"></button>
+// 		</div>
+// 		<div class="place-card__description">
+// 			<h3 class="place-card__name">${nameValue}</h3>
+// 			<button class="place-card__like-icon"></button>
+// 		</div>
+// 	</div>
+// 	`;
+// };
 
 // Изменение профиля в разметке "Имя", "О себе"
 const createElementsProfile = (nameValue, infoValue) => {
@@ -158,15 +235,17 @@ const openPopUpFormProfile = (event) => {
 
 // Обработчик клика по сердечку
 // Удаление карточки
-const likeVsRemove = (event) => {
+const distributionCardEvents = (event) => {
+	const card = new Card();
+
 	// Обработчик клика по сердечку
 	if (event.target.classList.contains('place-card__like-icon')) {
-		event.target.classList.toggle('place-card__like-icon_liked');
+		card.like();
 	}
 
 	// Удаление карточки
 	if (event.target.classList.contains('place-card__delete-icon')) {
-		placesList.removeChild(event.target.closest('.place-card'));
+		card.remove();
 	}
 };
 
@@ -232,13 +311,13 @@ const inputHandler = (event) => {
  */
 
 // Событие загрузки страницы
-window.addEventListener('load', loadedAddList(initialCards));
+window.addEventListener('load', cardList.render(initialCards));
 // Событие клика на кнопку "+" - для открытия формы
 userInfoAdd.addEventListener('click', openPopUpFormCards);
 // Событие клика на кнопку "Edit" - для открытия формы
 userInfoEdit.addEventListener('click', openPopUpFormProfile);
 // Событие клика на кнопку - like
-placesList.addEventListener('click', likeVsRemove);
+placesList.addEventListener('click', distributionCardEvents);
 // Событие клика по фото
 placesList.addEventListener('click', popUpImg);
 popUpImageClose.addEventListener('click', popUpImg);
