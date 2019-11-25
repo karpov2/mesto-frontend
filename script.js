@@ -58,6 +58,13 @@ class Card {
 		placesList.removeChild(event.target.closest('.place-card'));
 	}
 
+	// Открыть или закрыть фото
+	photo() {
+		console.log(event.target);
+		console.log(this);
+		popUpImage.classList.toggle('popup-image_is-opened');
+	}
+
 	// Он будет создавать DOM-элемент карточки
 	create(nameValue, infoValue) {
 		console.log('Card create');
@@ -247,27 +254,41 @@ const distributionCardEvents = (event) => {
 	if (event.target.classList.contains('place-card__delete-icon')) {
 		card.remove();
 	}
+
+	// Открываем фото или закрываем
+	// Добавляем конкретное фото
+	if (event.target.classList.contains('place-card__image')) {
+		// Подставить конкретное фото
+		popUpAddImage.src = event.target.style.backgroundImage.slice(5, -2);
+		console.log(event.target);
+		// Открыть фото
+		card.photo();
+	} else if (event.target === popUpImageClose) {
+		// Закрыть фото
+		console.log(event.target);
+		card.photo();
+	}
 };
 
 // Открываем фото или закрываем
 // Добавляем конкретное фото
-const popUpImg = (event) => {
-	// Открыть или закрыть фото
-	const popUpIsOpened = () => {
-		popUpImage.classList.toggle('popup-image_is-opened');
-	};
+// const popUpImg = (event) => {
+// 	// Открыть или закрыть фото
+// 	const popUpIsOpened = () => {
+// 		popUpImage.classList.toggle('popup-image_is-opened');
+// 	};
 
-	if (event.target.classList.contains('place-card__image')) {
-		// Подставить конкретное фото
-		popUpAddImage.src = event.target.style.backgroundImage.slice(5, -2);
+// 	if (event.target.classList.contains('place-card__image')) {
+// 		// Подставить конкретное фото
+// 		popUpAddImage.src = event.target.style.backgroundImage.slice(5, -2);
 
-		// Открыть фото
-		popUpIsOpened();
-	} else if (event.target === popUpImageClose) {
-		// Закрыть фото
-		popUpIsOpened();
-	}
-};
+// 		// Открыть фото
+// 		popUpIsOpened();
+// 	} else if (event.target === popUpImageClose) {
+// 		// Закрыть фото
+// 		popUpIsOpened();
+// 	}
+// };
 
 // Обработчик события input
 const inputHandler = (event) => {
@@ -319,8 +340,8 @@ userInfoEdit.addEventListener('click', openPopUpFormProfile);
 // Событие клика на кнопку - like
 placesList.addEventListener('click', distributionCardEvents);
 // Событие клика по фото
-placesList.addEventListener('click', popUpImg);
-popUpImageClose.addEventListener('click', popUpImg);
+// placesList.addEventListener('click', popUpImg);
+// popUpImageClose.addEventListener('click', popUpImg);
 
 
 
