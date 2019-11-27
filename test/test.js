@@ -57,4 +57,32 @@ function card() {
 	});
 }
 
-card();
+// card();
+
+class Component {
+	constructor(selector) {
+		console.log('Component');
+		console.log(this);
+		this.$el = document.querySelector(selector);
+	}
+
+	hide() {
+		this.$el.style.display = 'none';
+	}
+	
+	show() {
+		this.$el.style.display = 'block';
+	}
+}
+
+class Box extends Component {
+	constructor(options) {
+		super(options.selcetor);
+	}
+}
+
+const box1 = new Box({
+	selcetor: 'body',
+	size: 100,
+	color: 'red'
+});
