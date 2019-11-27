@@ -1,51 +1,60 @@
-// Список карточек
-const placesList = document.querySelector('.places-list');
+function card() {
 
-// initialCards.js
-const initialCards = [
-	{
-		name: 'Архыз',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-	},
-	{
-		name: 'Челябинская область',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-	},
-	{
-		name: 'Иваново',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+	// initialCards.js
+	const initialCards = [
+		{
+			name: 'Архыз',
+			link:
+				'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+		},
+		{
+			name: 'Челябинская область',
+			link:
+				'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+		},
+		{
+			name: 'Иваново',
+			link:
+				'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+		}
+	];
+
+	// Card.js
+	class Card {
+		constructor(cards) {
+			this._name = cards.name;
+			this._img = cards.link;
+		}
+
+		create() {
+			// console.log(this._name);
+			// console.log(this._img);
+			return `name: ${this._name}`;
+		}
 	}
-];
 
-// Card.js
-class Card {
-	constructor(props) {
-		this._name = props.name;
-		this._img = props.img;
+	// CardList.js
+	class CardList {
+		constructor(dom, cards) {
+			// Родительский контейнер карточек
+			this.$placesList = document.querySelector(dom);
+			this.cards = cards;
+		}
+
+		render(cardElem) {
+			console.log(`dom: ${this.$placesList}`);
+			console.log(cardElem.create());
+		}
 	}
 
-	create() {
-        return `name: ${this._name}, link: ${this._img}`;
-    }
+	// index.js
+	// Можно обернуть index.js в IIFE
+	initialCards.forEach(item => {
+		// console.log(item.name);
+		const cardList = new CardList('.places-list', item);
+		const cardElem = new Card(item);
+		cardList.render(cardElem);
+	});
 }
 
-// CardList.js
-class CardList {
-	constructor(dom, cards) {
-		this._dom = dom;
-		this.cards = cards;
-	}
-
-	render() {
-        const {cardElem} = new Card();
-
-        console.log(`dom: ${this._dom}`);
-        console.log(`dom: ${this.cards}`);
-        console.log(create(name, link));
-	}
-}
-
-// index.js
-initialCards.forEach(item => {
-	const cardList = new CardList();
-});
+card();
