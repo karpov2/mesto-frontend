@@ -7,12 +7,6 @@ const rootMasterContainer = document.querySelector('.root');
 
 // Список карточек
 const placesList = rootMasterContainer.querySelector('.places-list');
-const placeCard = placesList.querySelectorAll('.place-card');
-
-// Всплывающее фото
-const popUpImage = rootMasterContainer.querySelector('.popup-image');
-const popUpAddImage = popUpImage.querySelector('.popup-image__img');
-const popUpImageClose = popUpImage.querySelector('.popup-image__close');
 
 // Кнопка "Edit" открытия popup окна
 const userInfoEdit = rootMasterContainer.querySelector('.user-info__edit');
@@ -32,43 +26,37 @@ const popUpAddClose = popUpAddItem.querySelector('.popup__close');
 // Форма
 const { formCards, formProfile } = document.forms;
 
+// Текст ошибок валидации
 const lang = {
 	valueMissing: 'Это обязательное поле',
 	tooShort: 'Должно быть от 2 до 30 символов',
 	typeMismatch: 'Введите URL'
 };
 
+// Классы html разметки «карточки»
+const classCard = {
+	image: 'place-card__image', // Изображение
+	like: 'place-card__like-icon', // Лайк
+	isLiked: 'place-card__like-icon_liked', // Активный лайк
+	remove: 'place-card__delete-icon' // Удаление
+};
+
+// Классы html разметки «увеличенного фото карточки»
+const classPopUpPhoto = {
+	popUp: 'popup-image', // Родительский контейнер
+	open: 'popup_is-opened', // Display: block, появление (открытие) контейнера
+	img: 'popup-image__img', // Изображение
+	close: 'popup__close', // Закрыть
+};
+
+const cardList = new CardList(placesList, initialCards);
+const card = new Card(classCard);
+const zoomPhoto = new ZoomPhoto(classPopUpPhoto);
+
 /*
  * Объявление функций
  */
 
-const cardList = new CardList(placesList, placeCard);
-
-// Добавление карточки в разметку при загрузке страницы
-// const loadedAddList = (cards) => {
-// 	cards.forEach(item => {
-// 		let { name, link } = item;
-
-// 		// В блок placesList добавляем создданный div placeCard
-// 		placesList.insertAdjacentHTML('beforeend', createElementsList(name, link));
-// 	});
-// };
-
-// Создание новых карточек
-// const createElementsList = (nameValue, infoValue) => {
-// 	// Выводим список карточек
-// 	return `
-// 	<div class="place-card">
-// 		<div class="place-card__image" style="background-image: url(${infoValue});">
-// 			<button class="place-card__delete-icon"></button>
-// 		</div>
-// 		<div class="place-card__description">
-// 			<h3 class="place-card__name">${nameValue}</h3>
-// 			<button class="place-card__like-icon"></button>
-// 		</div>
-// 	</div>
-// 	`;
-// };
 
 // Изменение профиля в разметке "Имя", "О себе"
 const createElementsProfile = (nameValue, infoValue) => {
@@ -157,56 +145,6 @@ const openPopUpFormProfile = (event) => {
 	}
 };
 
-// Обработчик клика по сердечку
-// Удаление карточки
-const distributionCardEvents = (event) => {
-	const card = new Card();
-
-	// Обработчик клика по сердечку
-	if (event.target.classList.contains('place-card__like-icon')) {
-		card.like();
-	}
-
-	// Удаление карточки
-	if (event.target.classList.contains('place-card__delete-icon')) {
-		card.remove();
-	}
-
-	// Открываем фото или закрываем
-	// Добавляем конкретное фото
-	if (event.target.classList.contains('place-card__image')) {
-		// Подставить конкретное фото
-		popUpAddImage.src = event.target.style.backgroundImage.slice(5, -2);
-		console.log(event.target);
-		// Открыть фото
-		card.photo();
-	} else if (event.target === popUpImageClose) {
-		// Закрыть фото
-		console.log(event.target);
-		card.photo();
-	}
-};
-
-// Открываем фото или закрываем
-// Добавляем конкретное фото
-// const popUpImg = (event) => {
-// 	// Открыть или закрыть фото
-// 	const popUpIsOpened = () => {
-// 		popUpImage.classList.toggle('popup-image_is-opened');
-// 	};
-
-// 	if (event.target.classList.contains('place-card__image')) {
-// 		// Подставить конкретное фото
-// 		popUpAddImage.src = event.target.style.backgroundImage.slice(5, -2);
-
-// 		// Открыть фото
-// 		popUpIsOpened();
-// 	} else if (event.target === popUpImageClose) {
-// 		// Закрыть фото
-// 		popUpIsOpened();
-// 	}
-// };
-
 // Обработчик события input
 const inputHandler = (event) => {
 	const { name, info, submit } = event.currentTarget.elements;
@@ -244,105 +182,50 @@ const inputHandler = (event) => {
 
 };
 
+// Обработчик клика по сердечку
+// Удаление карточки
+const Events = (event) => {
+
+	// Лайк карточки
+	if (event.target.classList.contains(classCard.like)) {
+		card.like();
+	}
+
+	// Удаление карточки
+	if (event.target.classList.contains(classCard.remove)) {
+		card.remove();
+	}
+
+	// Увеличиваем (открываем) фото или закрываем
+	if (event.target.classList.contains(classCard.image)) {
+		// Открыть фото
+		zoomPhoto.open();
+		
+	} else if (event.target.classList.contains(classPopUpPhoto.close)) {
+		// Закрыть фото
+		zoomPhoto.close();
+		console.dir(event.target);
+	}
+
+	if (event.target === userInfoEdit) {
+		popUpProfileItem.classList.toggle('popup_is-opened');
+		console.log('open popup edit');
+	} else if (event.target.classList.contains('popup__close')) {
+		popUpProfileItem.classList.toggle('popup_is-opened');
+		console.log('close popup edit');
+	}
+	
+};
+
 /*
  * Обработчики событий
  */
 
 // Событие загрузки страницы
-window.addEventListener('load', cardList.render(initialCards));
+window.addEventListener('load', cardList.render());
 // Событие клика на кнопку "+" - для открытия формы
-userInfoAdd.addEventListener('click', openPopUpFormCards);
+// userInfoAdd.addEventListener('click', openPopUpFormCards);
 // Событие клика на кнопку "Edit" - для открытия формы
-userInfoEdit.addEventListener('click', openPopUpFormProfile);
+// userInfoEdit.addEventListener('click', openPopUpFormProfile);
 // Событие клика на кнопку - like
-placesList.addEventListener('click', distributionCardEvents);
-// Событие клика по фото
-// placesList.addEventListener('click', popUpImg);
-// popUpImageClose.addEventListener('click', popUpImg);
-
-
-
-
-/*
-
-Здравствуйте
-
-Правильно что используете event.target
-
-Хорошо, вы многое исправили но надо исправить ошибку в консоли.
-ПРи изменении имени в консоли возникает ошибка
-script.js:147 Uncaught TypeError: Cannot read property 'target' of undefined
-    at openPopUpFormProfile (script.js:147)
-	at HTMLFormElement.addProfile (script.js:84)
-
-	-------------
-	Илья: хех, не увидел - передал функциям event
-	-------------
-
-При добавлении карточки
-script.js:119 Uncaught TypeError: Cannot read property 'target' of undefined
-    at openPopUpFormCards (script.js:119)
-	at HTMLFormElement.addList (script.js:102)
-
-	-------------
-	Илья: хех, не увидел - передал функциям event
-	-------------
-
- lang вынесите за функцию в самый вверх
-
-	-------------
-	Илья: вынес lang
-	-------------
-
-Вынесите за функцию слушатель
-popUpAddClose.addEventListener('click', openPopUpFormCards);
-вы пытаетесь вызвать функцию в которой вешаете слушатель
-
-	-------------
-	Илья: получается замыкание? что плохого?
-	Я вызываю слушатель внутри этой вынкции - потому что он нужен только после вызова этой вынкции.
-	Функция открывает popUp, и слушатель нужен - что бы закрыть popUp
-	Таких слушателей 2 на каждую форму popUp (вы написали про 1)
-
-	Вы пишите замечание - но не обьясняете подробнее
-	Если эти событие точно нужно вынести отдельно (напишите почему), пока я оставлю так
-	-------------
-
-// Создание новых карточек очень хорошо сделали, мне понравилось
-const createElementsList = (nameValue, infoValue) => {
-
-Снова здравствуйте
-Спасибо что исправили ошибки. 
-
-   --- Вы пишите замечание - но не обьясняете подробнее
-   --- Если эти событие точно нужно вынести отдельно (напишите почему), пока я оставлю так
-Потому что вы код пишите не только для себя, но и для людей. Работая в большой команде над большим проектом
-Вы должны будете не только писать рабочий код, но и понятный другим участникам команды, а так 
-же людям которые после вас будут этот код поддерживать. В текущие ситуации вы создаёте дополнительную путаницу, 
-вешая слушатель в функцию которую вы же и вызываете. Повешайте на родителя один раз и используйте постоянно
-
-Привёл пример кода адаптированный под ваш код. Не назову его идеальным, так как и структуру HTML кода надо менять
-Popup для добавления фото я бы перенёс в root__section
-
-Работа принимается
-
-// пример кода с событиями для улучшения 
-function myFuncPopup(e) {
-	if (e.target.closest('.button user-info__edit') || e.target.closest('.user-info__edit')) {
-		console.log('здесь вызов какой то функции редактирования профиля');
-	}
-
-	if (e.target.closest('.user-info__add')) {
-		console.log('здесь вызов какой то функции для добавления фото');
-	}
-
-	if (e.target.closest('.popup__close') || e.target.closest('.popup__button')) {
-		console.log('здесь вызов какой то другой функции, ничего здесь не городим, просто вызываем');
-
-	}
-};
-
-const placesCard = document.querySelector('.root');
-placesCard.addEventListener('click', myFuncPopup);
-
-*/
+rootMasterContainer.addEventListener('click', Events);
