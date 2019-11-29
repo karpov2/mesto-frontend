@@ -1,53 +1,87 @@
 class Form {
-    constructor() {
-        this.form = params;
+    constructor(params) {
+        // Элементы формы
+        this.form = document.forms[params.form];
+        this.name = this.form.elements.name;
+        this.info = this.form.elements.info;
+        this.submit = this.form.elements.submit;
+
+        this.errorName = params.error.container.name;
+        this.errorInfo = params.error.container.info;
+
+        this.valueMissing = params.error.text.valueMissing;
+        this.tooShort = params.error.text.tooShort;
+        this.typeMismatch = params.error.text.tooShort;
+    }
+
+    // Добавление обработчиков событий
+    setAddEventListener() {
+		this.form.addEventListener('input', this.inputHandler);
+		this.form.addEventListener('submit', this.inputHandler);
+    }
+
+    // Удаление обработчиков событий
+    removeAddEventListener() {
+		this.form.removeEventListener('input', this.inputHandler);
+		this.form.removeEventListener('submit', this.inputHandler);
+    }
+
+    error() {
+        console.log(this);
     }
 
     inputHandler() {
-        const { name, info, submit } = event.currentTarget.elements;
-        const popUpErrorName = event.currentTarget.querySelector(
-            '.popup__error_name'
-        );
-        const popUpErrorInfo = event.currentTarget.querySelector(
-            '.popup__error_info'
-        );
+        const errorName = event.currentTarget.querySelector(this.errorName);
+        const errorInfo = event.currentTarget.querySelector(this.errorInfo);
+        console.log(errorName);
 
-        if (event.target === name) {
-            if (name.validity.valueMissing) {
-                popUpErrorName.textContent = lang.valueMissing;
-            } else if (name.validity.tooShort) {
-                popUpErrorName.textContent = lang.tooShort;
+        if (event.target === this.name) {
+            if (this.name.validity.valueMissing) {
+                errorName.textContent = this.valueMissing;
+            } else if (this.name.validity.tooShort) {
+                errorName.textContent = this.tooShort;
             } else {
-                popUpErrorName.textContent = null;
+                errorName.textContent = null;
             }
         }
 
-        if (event.target === info) {
-            if (info.validity.valueMissing) {
-                popUpErrorInfo.textContent = lang.valueMissing;
-            } else if (info.validity.tooShort) {
-                popUpErrorInfo.textContent = lang.tooShort;
-            } else if (info.validity.typeMismatch) {
-                popUpErrorInfo.textContent = lang.typeMismatch;
+        if (event.target === this.info) {
+            if (this.info.validity.valueMissing) {
+                errorInfo.textContent = this.valueMissing;
+            } else if (this.info.validity.tooShort) {
+                errorInfo.textContent = this.tooShort;
+            } else if (this.info.validity.typeMismatch) {
+                errorInfo.textContent = this.typeMismatch;
             } else {
-                popUpErrorInfo.textContent = null;
+                errorInfo.textContent = null;
             }
         }
 
         // Разблокировка кнопки формы
-        if (name.validity.valid && info.validity.valid) {
-            submit.removeAttribute('disabled');
+        if (this.name.validity.valid && this.info.validity.valid) {
+            this.submit.removeAttribute('disabled');
         } else {
             // Блокировка кнопки формы
-            submit.setAttribute('disabled', true);
+            this.submit.setAttribute('disabled', true);
         }
     }
 
     add() {
+        event.preventDefault();
 
+        // В блок placesList добавляем создданный div place-card
+        placesList.insertAdjacentHTML(
+            'beforeend',
+            createElementsList(name.value, info.value)
+        );  
     }
 
     reset() {
-
+        // Сброс формы
+        this.form.reset();
+        // Снова блокируем кнопку формы
+        this.submit.setAttribute('disabled', true);
+        // Удаление обработчиков событий
+        this.removeAddEventListener();
     }
 }

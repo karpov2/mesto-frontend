@@ -6,12 +6,12 @@ class Card {
 		this.$remove = params.remove;
 	}
 
-	// Лайк карточки 
+	// Лайк карточки
 	like() {
 		event.target.classList.toggle(this.$like);
 	}
 
-	// Удаление карточки 
+	// Удаление карточки
 	remove() {
 		placesList.removeChild(event.target.closest(`.${this.$remove}`));
 	}
