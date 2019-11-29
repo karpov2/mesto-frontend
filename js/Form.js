@@ -30,6 +30,7 @@ class Form {
         console.log(this);
     }
 
+    // убрать контекст вызова addEventListener, переделать все на контекст класса Form
     inputHandler() {
         const errorName = event.currentTarget.querySelector(this.errorName);
         const errorInfo = event.currentTarget.querySelector(this.errorInfo);
