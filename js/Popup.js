@@ -1,18 +1,21 @@
 // Это класс для всплывающего окна
 class Popup {
-	constructor(params) {
+	constructor() {
 		// Подключаемся к конкретному контейнеру popup
-        this.popUp = rootMasterContainer.querySelector(`.${params.popUp}`);
-        this.opened = params.open;
+        this.popup = null;
+        this.opened = null;
     }
 
     // Открыть popup
-    open() {
-        this.popUp.classList.add(this.opened);
+    open(params) {
+        this.popup = rootMasterContainer.querySelector(`.${params.popUp}`);
+        this.opened = params.open;
+
+        this.popup.classList.add(this.opened);
     }
 
     // Закрыть popup
     close() {
-        this.popUp.classList.remove(this.opened);
+        this.popup.classList.remove(this.opened);
     }
 }

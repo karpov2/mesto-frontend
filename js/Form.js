@@ -18,18 +18,23 @@ class Form {
         this.valueMissing = params.error.text.valueMissing;
         this.tooShort = params.error.text.tooShort;
         this.typeMismatch = params.error.text.tooShort;
+
+        // Добавление контента
+        this.addContent = params.addContent;
+
+        this.close = params.close;
     }
 
     // Добавление обработчиков событий
     setAddEventListener() {
-        console.log(this);
+        // console.log(this);
         this.form.addEventListener(
             "input",
             this.inputHandler.bind(this)
         );
         this.form.addEventListener(
             "submit",
-            this.inputHandler.bind(this)
+            this.add.bind(this)
         );
     }
 
@@ -41,13 +46,13 @@ class Form {
         );
         this.form.removeEventListener(
             "submit",
-            this.inputHandler.bind(this)
+            this.add.bind(this)
         );
     }
 
     // Валидация input и вывод текстов ошибок
     inputHandler() {
-        console.log(this);
+        // console.log(this);
 
         //
         if (event.target === this.name) {
@@ -75,7 +80,6 @@ class Form {
         // Разблокировка кнопки формы
         if (this.name.validity.valid && this.info.validity.valid) {
             this.submit.removeAttribute("disabled");
-            this.add();
         } else {
             // Блокировка кнопки формы
             this.submit.setAttribute("disabled", true);
@@ -91,7 +95,9 @@ class Form {
         //     createElementsList(this.name.value, this.info.value)
         // );
 
-        
+        this.addContent.add(this.name.value, this.info.value);
+
+        this.reset();
     }
 
     reset() {
@@ -101,5 +107,6 @@ class Form {
         this.submit.setAttribute("disabled", true);
         // Удаление обработчиков событий
         this.removeAddEventListener();
+        this.close
     }
 }

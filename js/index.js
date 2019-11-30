@@ -5,9 +5,6 @@
 // Основной контейнер
 const rootMasterContainer = document.querySelector(".root");
 
-// Список карточек
-// const placesList = rootMasterContainer.querySelector(".places-list");
-
 const htmlListCard = {
 	container: 'places-list'
 };
@@ -44,8 +41,15 @@ const htmlPopUp = {
     close: "popup__close" // Закрыть
 };
 
+// Профиль: "Имя" и "О себе"
+const userProfile = {
+	name: 'user-info__name',
+	info: 'user-info__job'
+};
+
 // Классы html разметки «Редактирование профиля»
 const htmlPopUpEdit = {
+	addContent: new Profile(userProfile),
     form: "formProfile",
     button: "user-info__edit", // Кнопка открытия формы
     popUp: "popup_edit-profile", // Родительский контейнер
@@ -69,20 +73,14 @@ const htmlPopUpPhoto = {
     ...htmlPopUp
 };
 
-// Профиль: "Имя" и "О себе"
-const userProfile = {
-	name: 'user-info__name',
-	info: 'user-info__job'
-};
-
 const cardList = new CardList(htmlListCard, initialCards);
 const card = new Card(htmlCard);
-const popupPhoto = new Popup(htmlPopUpPhoto);
-const popupEdit = new Popup(htmlPopUpEdit);
-const popupAdd = new Popup(htmlPopUpEdit);
+
+const popup = new Popup();
 const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
 
 const formEdit = new Form(htmlPopUpEdit);
+// const profile = new Profile(userProfile);
 
 /*
  * Объявление функций
@@ -177,47 +175,6 @@ const formEdit = new Form(htmlPopUpEdit);
 // 	}
 // };
 
-// Обработчик события input
-// const inputHandler = event => {
-// 	const { name, info, submit } = event.currentTarget.elements;
-// 	const popUpErrorName = event.currentTarget.querySelector(
-// 		'.popup__error_name'
-// 	);
-// 	const popUpErrorInfo = event.currentTarget.querySelector(
-// 		'.popup__error_info'
-// 	);
-
-// 	if (event.target === name) {
-// 		if (name.validity.valueMissing) {
-// 			popUpErrorName.textContent = lang.valueMissing;
-// 		} else if (name.validity.tooShort) {
-// 			popUpErrorName.textContent = lang.tooShort;
-// 		} else {
-// 			popUpErrorName.textContent = null;
-// 		}
-// 	}
-
-// 	if (event.target === info) {
-// 		if (info.validity.valueMissing) {
-// 			popUpErrorInfo.textContent = lang.valueMissing;
-// 		} else if (info.validity.tooShort) {
-// 			popUpErrorInfo.textContent = lang.tooShort;
-// 		} else if (info.validity.typeMismatch) {
-// 			popUpErrorInfo.textContent = lang.typeMismatch;
-// 		} else {
-// 			popUpErrorInfo.textContent = null;
-// 		}
-// 	}
-
-// 	// Разблокировка кнопки формы
-// 	if (name.validity.valid && info.validity.valid) {
-// 		submit.removeAttribute('disabled');
-// 	} else {
-// 		// Блокировка кнопки формы
-// 		submit.setAttribute('disabled', true);
-// 	}
-// };
-
 // Обработчик клика по сердечку
 // Удаление карточки
 const Events = event => {
@@ -235,36 +192,36 @@ const Events = event => {
     if (event.target.classList.contains(htmlCard.image)) {
         // Открыть фото
         zoomPhoto.open();
-        popupPhoto.open();
+        popup.open(htmlPopUpPhoto);
     } else if (
         event.target.classList.contains(htmlPopUpPhoto.close) &&
         event.target.closest(`.${htmlPopUpPhoto.popUp}`)
     ) {
         // Закрыть фото
-        popupPhoto.close();
+        popup.close();
         zoomPhoto.close();
     }
 
     // Открываем popup форму «Редактирование профиля»
     if (event.target.classList.contains(htmlPopUpEdit.button)) {
-        popupEdit.open();
+        popup.open(htmlPopUpEdit);
         formEdit.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpEdit.close) &&
         event.target.closest(`.${htmlPopUpEdit.popUp}`)
     ) {
-        popupEdit.close();
-        formEdit.reset.call(formEdit);
+		popup.close();
+        formEdit.reset();
     }
 
     // Открываем popup форму «Новое место»
     if (event.target.classList.contains(htmlPopUpAdd.button)) {
-        popupAdd.open();
+		popup.open(htmlPopUpAdd);
     } else if (
         event.target.classList.contains(htmlPopUpAdd.close) &&
         event.target.closest(`.${htmlPopUpAdd.popUp}`)
     ) {
-        popupAdd.close();
+        popup.close();
     }
 };
 
@@ -274,9 +231,5 @@ const Events = event => {
 
 // Событие загрузки страницы
 window.addEventListener("load", cardList.render());
-// Событие клика на кнопку "+" - для открытия формы
-// userInfoAdd.addEventListener('click', openPopUpFormCards);
-// Событие клика на кнопку "Edit" - для открытия формы
-// userInfoEdit.addEventListener('click', openPopUpFormProfile);
-// Событие клика на кнопку - like
+// Событие клика
 rootMasterContainer.addEventListener("click", Events);
