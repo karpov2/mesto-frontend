@@ -6,9 +6,15 @@ class Form {
         this.info = this.form.elements.info;
         this.submit = this.form.elements.submit;
 
-        this.errorName = params.error.container.name;
-        this.errorInfo = params.error.container.info;
+        // Подключаемся к полям вывода текста ошибок
+        this.errorName = this.form.querySelector(
+            `.${params.error.container.name}`
+        );
+        this.errorInfo = this.form.querySelector(
+            `.${params.error.container.info}`
+        );
 
+        // Ошибки валидации
         this.valueMissing = params.error.text.valueMissing;
         this.tooShort = params.error.text.tooShort;
         this.typeMismatch = params.error.text.tooShort;
@@ -16,54 +22,63 @@ class Form {
 
     // Добавление обработчиков событий
     setAddEventListener() {
-		this.form.addEventListener('input', this.inputHandler);
-		this.form.addEventListener('submit', this.inputHandler);
+        console.log(this);
+        this.form.addEventListener(
+            "input",
+            this.inputHandler.bind(this)
+        );
+        this.form.addEventListener(
+            "submit",
+            this.inputHandler.bind(this)
+        );
     }
 
     // Удаление обработчиков событий
     removeAddEventListener() {
-		this.form.removeEventListener('input', this.inputHandler);
-		this.form.removeEventListener('submit', this.inputHandler);
+        this.form.removeEventListener(
+            "input",
+            this.inputHandler.bind(this)
+        );
+        this.form.removeEventListener(
+            "submit",
+            this.inputHandler.bind(this)
+        );
     }
 
-    error() {
-        console.log(this);
-    }
-
-    // убрать контекст вызова addEventListener, переделать все на контекст класса Form
+    // Валидация input и вывод текстов ошибок
     inputHandler() {
-        const errorName = event.currentTarget.querySelector(this.errorName);
-        const errorInfo = event.currentTarget.querySelector(this.errorInfo);
-        console.log(errorName);
+        console.log(this);
 
+        //
         if (event.target === this.name) {
             if (this.name.validity.valueMissing) {
-                errorName.textContent = this.valueMissing;
+                this.errorName.textContent = this.valueMissing;
             } else if (this.name.validity.tooShort) {
-                errorName.textContent = this.tooShort;
+                this.errorName.textContent = this.tooShort;
             } else {
-                errorName.textContent = null;
+                this.errorName.textContent = null;
             }
         }
 
         if (event.target === this.info) {
             if (this.info.validity.valueMissing) {
-                errorInfo.textContent = this.valueMissing;
+                this.errorInfo.textContent = this.valueMissing;
             } else if (this.info.validity.tooShort) {
-                errorInfo.textContent = this.tooShort;
+                this.errorInfo.textContent = this.tooShort;
             } else if (this.info.validity.typeMismatch) {
-                errorInfo.textContent = this.typeMismatch;
+                this.errorInfo.textContent = this.typeMismatch;
             } else {
-                errorInfo.textContent = null;
+                this.errorInfo.textContent = null;
             }
         }
 
         // Разблокировка кнопки формы
         if (this.name.validity.valid && this.info.validity.valid) {
-            this.submit.removeAttribute('disabled');
+            this.submit.removeAttribute("disabled");
+            this.add();
         } else {
             // Блокировка кнопки формы
-            this.submit.setAttribute('disabled', true);
+            this.submit.setAttribute("disabled", true);
         }
     }
 
@@ -71,17 +86,19 @@ class Form {
         event.preventDefault();
 
         // В блок placesList добавляем создданный div place-card
-        placesList.insertAdjacentHTML(
-            'beforeend',
-            createElementsList(name.value, info.value)
-        );  
+        // cardList.container.insertAdjacentHTML(
+        //     "beforeend",
+        //     createElementsList(this.name.value, this.info.value)
+        // );
+
+        
     }
 
     reset() {
         // Сброс формы
         this.form.reset();
         // Снова блокируем кнопку формы
-        this.submit.setAttribute('disabled', true);
+        this.submit.setAttribute("disabled", true);
         // Удаление обработчиков событий
         this.removeAddEventListener();
     }

@@ -13,7 +13,7 @@ class Card {
 
 	// Удаление карточки
 	remove() {
-		placesList.removeChild(event.target.closest(`.${this.$remove}`));
+		cardList.container.removeChild(event.target.closest(`.${this.$remove}`));
 	}
 
 	// Он будет создавать DOM-элемент карточки

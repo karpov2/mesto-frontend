@@ -4,7 +4,7 @@ class CardList {
 	// DOM-элемент — контейнер, куда нужно складывать карточки;
 	// Массив карточек, которые будут на странице при загрузке.
 	constructor(dom, arrayCards) {
-		this.container = dom;
+		this.container = rootMasterContainer.querySelector(`.${dom.container}`);
 		this.card = arrayCards;
 		console.log('CardList constructor');
 	}

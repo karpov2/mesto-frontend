@@ -1,7 +1,7 @@
 // Увеличение фотографии карточки
 class ZoomPhoto {
     constructor(params) {
-        this.popUp = placesList.querySelector(`.${params.popUp}`);
+        this.popUp = cardList.container.querySelector(`.${params.popUp}`);
         this.img = this.popUp.querySelector(`.${params.img}`);
     }
 
