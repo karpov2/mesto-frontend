@@ -1,5 +1,6 @@
 class Form {
     constructor(params) {
+        console.log('class Form');
         // Элементы формы
         this.form = document.forms[params.form];
         this.name = this.form.elements.name;
@@ -27,6 +28,7 @@ class Form {
 
     // Добавление обработчиков событий
     setAddEventListener() {
+        console.log('class Form -- metod: setAddEventListener');
         // console.log(this);
         this.form.addEventListener(
             "input",
@@ -40,6 +42,7 @@ class Form {
 
     // Удаление обработчиков событий
     removeAddEventListener() {
+        console.log('class Form -- metod: removeAddEventListener');
         this.form.removeEventListener(
             "input",
             this.inputHandler.bind(this)
@@ -52,6 +55,7 @@ class Form {
 
     // Валидация input и вывод текстов ошибок
     inputHandler() {
+        console.log('class Form -- metod: inputHandler');
         // console.log(this);
 
         //
@@ -87,26 +91,33 @@ class Form {
     }
 
     add() {
+        console.log('class Form -- metod: add');
         event.preventDefault();
-
+        
         // В блок placesList добавляем создданный div place-card
         // cardList.container.insertAdjacentHTML(
         //     "beforeend",
         //     createElementsList(this.name.value, this.info.value)
         // );
-
         this.addContent.add(this.name.value, this.info.value);
-
+        
         this.reset();
     }
 
+    value(name, info) {
+        console.log('class Form -- metod: value');
+        this.name.value = name;
+        this.info.value = info;
+    }
+
     reset() {
+        console.log('class Form -- metod: reset');
         // Сброс формы
         this.form.reset();
         // Снова блокируем кнопку формы
         this.submit.setAttribute("disabled", true);
         // Удаление обработчиков событий
         this.removeAddEventListener();
-        this.close
+        popup.close();
     }
 }

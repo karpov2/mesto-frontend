@@ -6,7 +6,8 @@ class CardList {
 	constructor(dom, arrayCards) {
 		this.container = rootMasterContainer.querySelector(`.${dom.container}`);
 		this.card = arrayCards;
-		console.log('CardList constructor');
+		
+		console.log('class CardList');
 	}
 
 	// addCard для добавления карточки в список

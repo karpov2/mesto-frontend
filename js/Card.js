@@ -1,7 +1,7 @@
 // Это класс, создающий карточку
 class Card {
 	constructor(params) {
-		console.log('Card constructor');
+		console.log('class Card');
 		this.$like = params.isLiked;
 		this.$remove = params.remove;
 	}

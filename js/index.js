@@ -204,6 +204,8 @@ const Events = event => {
 
     // Открываем popup форму «Редактирование профиля»
     if (event.target.classList.contains(htmlPopUpEdit.button)) {
+        console.log('open event Edit');
+        htmlPopUpEdit.addContent.addValue();
         popup.open(htmlPopUpEdit);
         formEdit.setAddEventListener();
     } else if (

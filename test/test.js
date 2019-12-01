@@ -1,12 +1,38 @@
-const popup = {
-	open: 'popup_is-opened',
-	close: 'popup__close'
+document.querySelector('.test').addEventListener("click", events);
+
+function events(event) {
+	if (event.target.classList.contains('test')) {
+		console.log('open event click');
+		form.setAddEventListener();
+	}
 };
 
-const obj = {
-	popUp: 'popup-image',
-	img: 'popup-image__img',
-	...popup
-};
+class Form {
+	constructor() {
+		console.log('class Form');
+		this.counter = 0;
+	}
 
-console.log(obj);
+  	setAddEventListener() {
+		console.log('class Form -- metod: setAddEventListener');
+		document.querySelector('.test__input').addEventListener("input", this.add.bind(this));
+	}
+
+	removeAddEventListener() {
+		console.log('class Form -- metod: removeAddEventListener');
+		document.querySelector('.test__input').removeEventListener("input", this.add);
+	}
+
+	add() {
+		console.log('class Form -- metod: add');
+		console.log(this.counter += 1);
+		this.reset();
+	}
+
+	reset() {
+		console.log('class Form -- metod: reset');
+		this.removeAddEventListener();
+	}
+}
+
+const form = new Form();
