@@ -7,36 +7,23 @@ class Form {
         this.info = this.form.elements.info;
         this.submit = this.form.elements.submit;
 
-        // Подключаемся к полям вывода текста ошибок
-        this.errorName = this.form.querySelector(
-            `.${params.error.container.name}`
-        );
-        this.errorInfo = this.form.querySelector(
-            `.${params.error.container.info}`
-        );
-
-        // Ошибки валидации
-        this.valueMissing = params.error.text.valueMissing;
-        this.tooShort = params.error.text.tooShort;
-        this.typeMismatch = params.error.text.tooShort;
-
-        // Добавление контента
+        // Добавление контента на страницу
         this.addContent = params.addContent;
 
-        this.close = params.close;
+        // Сохранение контекста класса Form для метода add
+        this._add = this.add.bind(this);
     }
 
     // Добавление обработчиков событий
     setAddEventListener() {
         console.log('class Form -- metod: setAddEventListener');
-        // console.log(this);
         this.form.addEventListener(
-            "input",
-            this.inputHandler.bind(this)
+            'input',
+            this._form
         );
         this.form.addEventListener(
-            "submit",
-            this.add.bind(this)
+            'submit',
+            this._add
         );
     }
 
@@ -44,61 +31,27 @@ class Form {
     removeAddEventListener() {
         console.log('class Form -- metod: removeAddEventListener');
         this.form.removeEventListener(
-            "input",
-            this.inputHandler.bind(this)
+            'input',
+            validation.check
         );
         this.form.removeEventListener(
-            "submit",
-            this.add.bind(this)
+            'submit',
+            this._add
         );
     }
 
-    // Валидация input и вывод текстов ошибок
-    inputHandler() {
-        console.log('class Form -- metod: inputHandler');
-        // console.log(this);
-
-        //
-        if (event.target === this.name) {
-            if (this.name.validity.valueMissing) {
-                this.errorName.textContent = this.valueMissing;
-            } else if (this.name.validity.tooShort) {
-                this.errorName.textContent = this.tooShort;
-            } else {
-                this.errorName.textContent = null;
-            }
-        }
-
-        if (event.target === this.info) {
-            if (this.info.validity.valueMissing) {
-                this.errorInfo.textContent = this.valueMissing;
-            } else if (this.info.validity.tooShort) {
-                this.errorInfo.textContent = this.tooShort;
-            } else if (this.info.validity.typeMismatch) {
-                this.errorInfo.textContent = this.typeMismatch;
-            } else {
-                this.errorInfo.textContent = null;
-            }
-        }
-
-        // Разблокировка кнопки формы
-        if (this.name.validity.valid && this.info.validity.valid) {
-            this.submit.removeAttribute("disabled");
-        } else {
-            // Блокировка кнопки формы
-            this.submit.setAttribute("disabled", true);
-        }
+    _form() {
+        console.log(this);
+        validation.check(this); 
     }
 
     add() {
         console.log('class Form -- metod: add');
+        console.log(this);
         event.preventDefault();
-        
-        // В блок placesList добавляем создданный div place-card
-        // cardList.container.insertAdjacentHTML(
-        //     "beforeend",
-        //     createElementsList(this.name.value, this.info.value)
-        // );
+
+        console.log(this.addContent);
+
         this.addContent.add(this.name.value, this.info.value);
         
         this.reset();
@@ -115,7 +68,7 @@ class Form {
         // Сброс формы
         this.form.reset();
         // Снова блокируем кнопку формы
-        this.submit.setAttribute("disabled", true);
+        this.submit.setAttribute('disabled', true);
         // Удаление обработчиков событий
         this.removeAddEventListener();
         popup.close();

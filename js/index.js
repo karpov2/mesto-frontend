@@ -5,6 +5,8 @@
 // Основной контейнер
 const rootMasterContainer = document.querySelector(".root");
 
+// Классы добавил в свойства обьектов - что бы удобно переиспользовать и переопределять
+
 const htmlListCard = {
 	container: 'places-list'
 };
@@ -14,7 +16,8 @@ const htmlCard = {
     image: "place-card__image", // Изображение
     like: "place-card__like-icon", // Лайк
     isLiked: "place-card__like-icon_liked", // Активный лайк
-    remove: "place-card__delete-icon" // Удаление
+    remove: "place-card__delete-icon", // Кнопка удаление
+    container: "place-card" // Родительский контейнер
 };
 
 // Классы html разметки «Формы»
@@ -59,6 +62,7 @@ const htmlPopUpEdit = {
 
 // Классы html разметки «Новое место»
 const htmlPopUpAdd = {
+    addContent: new CardList(htmlListCard),
     form: "formCards",
     button: "user-info__add", // Кнопка открытия формы
     popUp: "popup_add-item", // Родительский контейнер
@@ -73,107 +77,25 @@ const htmlPopUpPhoto = {
     ...htmlPopUp
 };
 
+// Список карточек
+// Загрузка карточек при загрузки страницы
 const cardList = new CardList(htmlListCard, initialCards);
+// Работа с карточкой 
 const card = new Card(htmlCard);
-
+// Пупап окна (открытие/закрытие)
 const popup = new Popup();
+// увеличение фото
 const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
-
+// Форма редактирования профиля
 const formEdit = new Form(htmlPopUpEdit);
-// const profile = new Profile(userProfile);
+// Форма для добавления нового места
+const formAdd = new Form(htmlPopUpAdd);
+// Валидация формы
+const validation = new Validation(htmlForm);
 
 /*
  * Объявление функций
  */
-
-// Изменение профиля в разметке "Имя", "О себе"
-// const createElementsProfile = (nameValue, infoValue) => {
-// 	userInfoName.textContent = nameValue;
-// 	userInfoJob.textContent = infoValue;
-// };
-
-// Обработка формы профиля
-// const addProfile = event => {
-// 	event.preventDefault();
-
-// 	// Элементы формы
-// 	let { name, info, submit } = formProfile.elements;
-
-// 	createElementsProfile(name.value, info.value);
-
-// 	// Сброс формы
-// 	formProfile.reset();
-// 	// Закрытие popup по срабатыванию
-// 	openPopUpFormProfile(event);
-// 	// Снова блокируем кнопку формы
-// 	submit.setAttribute('disabled', true);
-// };
-
-//Обработка формы добавления нового места
-// const addList = event => {
-// 	event.preventDefault();
-
-// 	// Элементы формы
-// 	let { name, info, submit } = formCards.elements;
-
-// 	// В блок placesList добавляем создданный div place-card
-// 	placesList.insertAdjacentHTML(
-// 		'beforeend',
-// 		createElementsList(name.value, info.value)
-// 	);
-
-// 	// Сброс формы
-// 	formCards.reset();
-// 	// Закрытие popup по срабатыванию
-// 	openPopUpFormCards(event);
-// 	// Снова блокируем кнопку формы
-// 	submit.setAttribute('disabled', true);
-// };
-
-// Открытие и закрытие popup
-// Добавление нового места
-// const openPopUpFormCards = event => {
-// 	popUpAddItem.classList.toggle('popup_is-opened');
-// 	// Событие отправки формы
-// 	formCards.addEventListener('submit', addList);
-// 	// Событие клика на кнопку - для закрытия формы
-// 	popUpAddClose.addEventListener('click', openPopUpFormCards);
-// 	// Событие ввода в input - для условий формы
-// 	formCards.addEventListener('input', inputHandler);
-
-// 	if (event.target === popUpAddClose) {
-// 		// Сброс формы
-// 		formCards.reset();
-// 		formCards.querySelector('.popup__error_name').textContent = null;
-// 		formCards.querySelector('.popup__error_info').textContent = null;
-// 	}
-// };
-
-// Открытие и закрытие popup
-// Редактирование профиля
-// const openPopUpFormProfile = event => {
-// 	popUpProfileItem.classList.toggle('popup_is-opened');
-
-// 	// Элементы формы
-// 	const { name, info, submit } = formProfile.elements;
-// 	name.value = userInfoName.textContent;
-// 	info.value = userInfoJob.textContent;
-
-// 	submit.removeAttribute('disabled'); // вызвать функцию
-
-// 	// Событие отправки формы
-// 	formProfile.addEventListener('submit', addProfile);
-// 	// Событие клика на кнопку - для закрытия формы
-// 	popUpProfileClose.addEventListener('click', openPopUpFormProfile);
-// 	// Событие ввода в input - для условий формы
-// 	formProfile.addEventListener('input', inputHandler);
-
-// 	if (event.target === popUpProfileClose) {
-// 		// Сброс ошибок валидации
-// 		formProfile.querySelector('.popup__error_name').textContent = null;
-// 		formProfile.querySelector('.popup__error_info').textContent = null;
-// 	}
-// };
 
 // Обработчик клика по сердечку
 // Удаление карточки
@@ -218,12 +140,15 @@ const Events = event => {
 
     // Открываем popup форму «Новое место»
     if (event.target.classList.contains(htmlPopUpAdd.button)) {
-		popup.open(htmlPopUpAdd);
+        console.log('open event Add');
+        popup.open(htmlPopUpAdd);
+        formAdd.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpAdd.close) &&
         event.target.closest(`.${htmlPopUpAdd.popUp}`)
     ) {
         popup.close();
+        formAdd.reset();
     }
 };
 
@@ -235,3 +160,12 @@ const Events = event => {
 window.addEventListener("load", cardList.render());
 // Событие клика
 rootMasterContainer.addEventListener("click", Events);
+
+
+/*
+
+Илья:
+Я разделил все нужные блоки на обьекты
+Классы добавил в свойства обьектов - что бы удобно переиспользовать и переопределять
+
+*/

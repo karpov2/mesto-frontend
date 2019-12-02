@@ -11,7 +11,7 @@ class CardList {
 	}
 
 	// addCard для добавления карточки в список
-	addCard(name, link) {
+	add(name, link) {
 		this.container.insertAdjacentHTML('beforeend', card.create(name, link));
 	}
 
@@ -20,7 +20,7 @@ class CardList {
 		this.card.forEach(item => {
 			const { name, link } = item;
 			// В блок placesList добавляем создданный div placeCard
-			this.addCard(name, link);
+			this.add(name, link);
 		});
 	}
 }

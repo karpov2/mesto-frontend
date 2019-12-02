@@ -3,7 +3,7 @@ class Card {
 	constructor(params) {
 		console.log('class Card');
 		this.$like = params.isLiked;
-		this.$remove = params.remove;
+		this.$container = params.container;
 	}
 
 	// Лайк карточки
@@ -13,7 +13,7 @@ class Card {
 
 	// Удаление карточки
 	remove() {
-		cardList.container.removeChild(event.target.closest(`.${this.$remove}`));
+		cardList.container.removeChild(event.target.closest(`.${this.$container}`));
 	}
 
 	// Он будет создавать DOM-элемент карточки
