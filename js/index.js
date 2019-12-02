@@ -129,6 +129,7 @@ const Events = event => {
         console.log('open event Edit');
         htmlPopUpEdit.addContent.addValue();
         popup.open(htmlPopUpEdit);
+        validation.check(formEdit.form);
         formEdit.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpEdit.close) &&
