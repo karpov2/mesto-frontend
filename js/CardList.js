@@ -5,6 +5,7 @@ class CardList {
 	// Массив карточек, которые будут на странице при загрузке.
 	constructor(dom, arrayCards) {
 		this.container = rootMasterContainer.querySelector(`.${dom.container}`);
+		// Можно лучше: Имя card не отражает сущности хранимых данных
 		this.card = arrayCards;
 		
 		console.log('class CardList');
