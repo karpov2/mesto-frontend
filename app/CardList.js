@@ -7,8 +7,6 @@ class CardList {
 		this.container = dom["root container"].querySelector(`.${dom.container}`);
 		// Можно лучше: Имя card не отражает сущности хранимых данных
 		this.card = arrayCards;
-		
-		console.log('class CardList');
 	}
 
 	// addCard для добавления карточки в список

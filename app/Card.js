@@ -1,7 +1,6 @@
 // Это класс, создающий карточку
 class Card {
 	constructor(params) {
-		console.log('class Card');
 		this.$like = params.isLiked;
 		this.$container = params.container;
 	}
@@ -18,7 +17,6 @@ class Card {
 
 	// Он будет создавать DOM-элемент карточки
 	create(name, link) {
-		console.log('Card create');
 		// Выводим список карточек
 		return `
 		<div class="place-card">

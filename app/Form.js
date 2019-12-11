@@ -1,6 +1,6 @@
-class Form {
+class Form extends Popup {
     constructor(params) {
-        console.log('class Form');
+        super();
         // Элементы формы
         this.form = document.forms[params.form];
         this.name = this.form.elements.name;
@@ -16,7 +16,6 @@ class Form {
 
     // Добавление обработчиков событий
     setAddEventListener() {
-        console.log('class Form -- metod: setAddEventListener');
         this.form.addEventListener(
             'input',
             this._form
@@ -29,7 +28,6 @@ class Form {
 
     // Удаление обработчиков событий
     removeAddEventListener() {
-        console.log('class Form -- metod: removeAddEventListener');
         this.form.removeEventListener(
             'input',
             validation.check
@@ -41,16 +39,11 @@ class Form {
     }
 
     _form() {
-        console.log(this);
-        validation.check(this); 
+        validation.check(this);
     }
 
     add() {
-        console.log('class Form -- metod: add');
-        console.log(this);
         event.preventDefault();
-
-        console.log(this.addContent);
 
         this.addContent.add(this.name.value, this.info.value);
         
@@ -58,19 +51,17 @@ class Form {
     }
 
     value(name, info) {
-        console.log('class Form -- metod: value');
         this.name.value = name;
         this.info.value = info;
     }
 
     reset() {
-        console.log('class Form -- metod: reset');
         // Сброс формы
         this.form.reset();
         // Снова блокируем кнопку формы
         this.submit.setAttribute('disabled', true);
         // Удаление обработчиков событий
         this.removeAddEventListener();
-        popup.close();
+        this.close();
     }
 }

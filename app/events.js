@@ -18,42 +18,38 @@ const Events = event => {
     // Увеличиваем (открываем) фото или закрываем
     if (event.target.classList.contains(htmlCard.image)) {
         // Открыть фото
-        zoomPhoto.open();
-        popup.open(htmlPopUpPhoto);
+        zoomPhoto.add();
+        zoomPhoto.open(htmlPopUpPhoto);
     } else if (
         event.target.classList.contains(htmlPopUpPhoto.close) &&
         event.target.closest(`.${htmlPopUpPhoto.popUp}`)
     ) {
         // Закрыть фото
-        popup.close();
         zoomPhoto.close();
+        zoomPhoto.delete();
     }
 
     // Открываем popup форму «Редактирование профиля»
     if (event.target.classList.contains(htmlPopUpEdit.button)) {
-        console.log('open event Edit');
         htmlPopUpEdit.addContent.addValue();
-        popup.open(htmlPopUpEdit);
+        formEdit.open(htmlPopUpEdit);
         validation.check(formEdit.form);
         formEdit.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpEdit.close) &&
         event.target.closest(`.${htmlPopUpEdit.popUp}`)
     ) {
-		popup.close();
         formEdit.reset();
     }
 
     // Открываем popup форму «Новое место»
     if (event.target.classList.contains(htmlPopUpAdd.button)) {
-        console.log('open event Add');
-        popup.open(htmlPopUpAdd);
+        formAdd.open(htmlPopUpAdd);
         formAdd.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpAdd.close) &&
         event.target.closest(`.${htmlPopUpAdd.popUp}`)
     ) {
-        popup.close();
         formAdd.reset();
     }
 };

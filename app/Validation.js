@@ -1,6 +1,5 @@
 class Validation {
     constructor(params) {
-        console.log('class Validation');
         this.name = null;
         this.info = null;
         this.submit = null;
@@ -12,15 +11,10 @@ class Validation {
         // Ошибки валидации
         this.valueMissing = params.error.text.valueMissing;
         this.tooShort = params.error.text.tooShort;
-        this.typeMismatch = params.error.text.tooShort;
+        this.typeMismatch = params.error.text.typeMismatch;
     }
 
     check(form) {
-        console.log('class Validation -- metod: check');
-        console.log(this);
-        console.log(event.target);
-
-        console.log(form);
         // Подключаемся к полям вывода текста ошибок
         this.errorName = form.querySelector(
             `.${this.errorContainerName}`
@@ -33,39 +27,44 @@ class Validation {
         this.info = form.elements.info;
         this.submit = form.elements.submit;
 
-        if (event.target === this.name) {
-            if (this.name.validity.valueMissing) {
-                this.errorName.textContent = this.valueMissing;
-            } else if (this.name.validity.tooShort) {
-                this.errorName.textContent = this.tooShort;
-            } else {
-                this.errorName.textContent = null;
-            }
-        }
+        this.checkName(this.name, this.errorName);
+        this.checkInfo(this.info, this.errorInfo);
+        
+        this.valid(this.name, this.info, this.submit);
+    }
 
-        if (event.target === this.info) {
-            if (this.info.validity.valueMissing) {
-                this.errorInfo.textContent = this.valueMissing;
-            } else if (this.info.validity.tooShort) {
-                this.errorInfo.textContent = this.tooShort;
-            } else if (this.info.validity.typeMismatch) {
-                this.errorInfo.textContent = this.typeMismatch;
-            } else {
-                this.errorInfo.textContent = null;
-            }
+    checkName(name, error) {
+        if (event.target === name) {
+            this.error(name, error);
         }
+    }
 
-        // Разблокировка кнопки формы
-        if (this.name.validity.valid && this.info.validity.valid) {
-            this.submit.removeAttribute("disabled");
-        } else {
-            // Блокировка кнопки формы
-            this.submit.setAttribute("disabled", true);
+    checkInfo(info, error) {
+        if (event.target === info) {
+            this.error(info, error);
         }
     }
 
     // Нужно исправить: Удалите неиспользуемый метод
-    error() {
+    error(input, error) {
+        if (input.validity.valueMissing) {
+            error.textContent = this.valueMissing;
+        } else if (input.validity.tooShort) {
+            error.textContent = this.tooShort;
+        } else if (input.validity.typeMismatch) {
+            error.textContent = this.typeMismatch;
+        } else {
+            error.textContent = null;
+        }
+    }
 
+    valid(name, info, submit) {
+        // Разблокировка кнопки формы
+        if (name.validity.valid && info.validity.valid) {
+            submit.removeAttribute("disabled");
+        } else {
+            // Блокировка кнопки формы
+            submit.setAttribute("disabled", true);
+        }
     }
 }
