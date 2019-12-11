@@ -10,7 +10,7 @@ class Popup {
     // Открыть popup
     open(params) {
         console.log('class Popup -- metod: open');
-        this.popup = rootMasterContainer.querySelector(`.${params.popUp}`);
+        this.popup = params['root container'].querySelector(`.${params.popUp}`);
         this.opened = params.open;
 
         this.popup.classList.add(this.opened);

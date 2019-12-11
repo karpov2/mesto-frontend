@@ -2,8 +2,8 @@ class Profile {
     constructor(params) {
         console.log('class Profile');
         // Профиль: "Имя" и "О себе"
-        this.name = rootMasterContainer.querySelector(`.${params.name}`);
-        this.info = rootMasterContainer.querySelector(`.${params.info}`);
+        this.name = params['root container'].querySelector(`.${params.name}`);
+        this.info = params['root container'].querySelector(`.${params.info}`);
     }
 
     add(name, info) {
