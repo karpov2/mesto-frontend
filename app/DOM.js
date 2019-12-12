@@ -84,6 +84,7 @@ const htmlPopUpPhoto = {
 
 const dataApi = {
     url: 'http://95.216.175.5/cohort6/',
+    method: 'PATCH',
     headers: {
         authorization: '168a5e64-116b-4823-bcb6-e65bb6a0c4f2',
         'Content-Type': 'application/json'
