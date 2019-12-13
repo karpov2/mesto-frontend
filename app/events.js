@@ -19,13 +19,11 @@ const Events = event => {
     if (event.target.classList.contains(htmlCard.image)) {
         // Открыть фото
         zoomPhoto.add();
-        zoomPhoto.open(htmlPopUpPhoto);
     } else if (
         event.target.classList.contains(htmlPopUpPhoto.close) &&
         event.target.closest(`.${htmlPopUpPhoto.popUp}`)
     ) {
         // Закрыть фото
-        zoomPhoto.close();
         zoomPhoto.delete();
     }
 

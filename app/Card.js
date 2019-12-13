@@ -2,7 +2,8 @@
 class Card {
 	constructor(params) {
 		this.$like = params.isLiked;
-		this.$container = params.container;
+		this.containerParent = params['root container'].querySelector(`.${params.list}`);
+		this.containerChild = params.card;
 	}
 
 	// Лайк карточки
@@ -12,7 +13,7 @@ class Card {
 
 	// Удаление карточки
 	remove() {
-		cardList.container.removeChild(event.target.closest(`.${this.$container}`));
+		this.containerParent.removeChild(event.target.closest(`.${this.containerChild}`));
 	}
 
 	// Он будет создавать DOM-элемент карточки
@@ -25,7 +26,10 @@ class Card {
 			</div>
 			<div class="place-card__description">
 				<h3 class="place-card__name">${name}</h3>
-				<button class="place-card__like-icon"></button>
+				<div class="place-card__like">
+					<button class="place-card__like-icon"></button>
+					<div class="place-card__like-counter">0</div>
+				</div>
 			</div>
 		</div>
 		`.trim();

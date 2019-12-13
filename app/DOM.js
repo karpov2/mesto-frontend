@@ -10,7 +10,7 @@ const rootContainer = {
 // Классы добавил в свойства обьектов - что бы удобно переиспользовать и переопределять
 
 const htmlListCard = {
-    container: 'places-list',
+    list: 'places-list',
     ...rootContainer
 };
 
@@ -20,7 +20,8 @@ const htmlCard = {
     like: "place-card__like-icon", // Лайк
     isLiked: "place-card__like-icon_liked", // Активный лайк
     remove: "place-card__delete-icon", // Кнопка удаление
-    container: "place-card" // Родительский контейнер
+    card: "place-card", // Родительский контейнер
+    ...htmlListCard
 };
 
 // Классы html разметки «Формы»
@@ -82,11 +83,18 @@ const htmlPopUpPhoto = {
     ...htmlPopUp
 };
 
-const dataApi = {
-    url: 'http://95.216.175.5/cohort6/',
-    method: 'PATCH',
+const connectionApi = {
+    url: 'http://95.216.175.5',
+    group: 'cohort6',
+    method: {
+        get: 'GET',
+        post: 'POST',
+        patch: 'PATCH',
+        put: 'PUT',
+        delete: 'DELETE',
+    },
     headers: {
-        authorization: '168a5e64-116b-4823-bcb6-e65bb6a0c4f2',
-        'Content-Type': 'application/json'
+        token: '168a5e64-116b-4823-bcb6-e65bb6a0c4f2',
+        type: 'application/json'
         }
 };

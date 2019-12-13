@@ -2,13 +2,13 @@
  * Подключение модулей
  */
 
-const api = new Api();
+const api = new Api(connectionApi);
 
-// Список карточек
-// Загрузка карточек при загрузки страницы
-const cardList = new CardList(htmlListCard, initialCards);
 // Работа с карточкой 
 const card = new Card(htmlCard);
+// Список карточек
+// Загрузка карточек при загрузки страницы
+const cardList = new CardList(htmlListCard, api, card);
 // увеличение фото
 const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
 // Форма редактирования профиля
