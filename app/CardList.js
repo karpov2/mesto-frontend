@@ -4,7 +4,7 @@ class CardList {
 	// DOM-элемент — контейнер, куда нужно складывать карточки;
 	// Массив карточек, которые будут на странице при загрузке.
 	constructor(dom, api, classCard) {
-		this.container = dom["root container"].querySelector(`.${dom.list}`);
+		this.container = document.querySelector(`.${dom.list}`);
 		// Можно лучше: Имя card не отражает сущности хранимых данных
 		this.cards = api;
 		this.card = classCard;
@@ -20,7 +20,7 @@ class CardList {
 
 	// render для отрисовки карточек при загрузке страницы
 	render() {
-		this.cards.getInitialCards()
+		this.cards.getCards()
 			.then(data => {
 				data.forEach(item => {
 					const { name, link } = item;

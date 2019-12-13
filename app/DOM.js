@@ -2,16 +2,10 @@
  * Объявление переменных
  */
 
-// Основной контейнер
-const rootContainer = {
-    'root container': document.querySelector('.root')
-};
-
 // Классы добавил в свойства обьектов - что бы удобно переиспользовать и переопределять
 
 const htmlListCard = {
-    list: 'places-list',
-    ...rootContainer
+    list: 'places-list'
 };
 
 // Классы html разметки «Карточки»
@@ -45,20 +39,19 @@ const htmlForm = {
 // Классы html разметки «PopUp»
 const htmlPopUp = {
     open: "popup_is-opened", // Display: block, появление (открытие) контейнера
-    close: "popup__close", // Закрыть
-    ...rootContainer
+    close: "popup__close" // Закрыть
 };
 
 // Профиль: "Имя" и "О себе"
 const userProfile = {
 	name: 'user-info__name',
-    info: 'user-info__job',
-    ...rootContainer
+    about: 'user-info__job',
+    avatar: 'user-info__photo'
 };
 
 // Классы html разметки «Редактирование профиля»
 const htmlPopUpEdit = {
-	addContent: new Profile(userProfile),
+	// addContent: new Profile(userProfile),
     form: "formProfile",
     button: "user-info__edit", // Кнопка открытия формы
     popUp: "popup_edit-profile", // Родительский контейнер

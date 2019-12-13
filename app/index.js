@@ -2,6 +2,7 @@
  * Подключение модулей
  */
 
+//  Подключение API
 const api = new Api(connectionApi);
 
 // Работа с карточкой 
@@ -17,6 +18,8 @@ const formEdit = new Form(htmlPopUpEdit);
 const formAdd = new Form(htmlPopUpAdd);
 // Валидация формы
 const validation = new Validation(htmlForm);
+
+const profile = new Profile(userProfile, api);
 
 /*
 

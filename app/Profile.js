@@ -1,19 +1,35 @@
 class Profile {
-    constructor(params) {
+    constructor(params, api) {
         // Профиль: "Имя" и "О себе"
-        this.name = params['root container'].querySelector(`.${params.name}`);
-        this.info = params['root container'].querySelector(`.${params.info}`);
+        this.name = document.querySelector(`.${params.name}`);
+        this.about = document.querySelector(`.${params.about}`);
+        this.avatar = document.querySelector(`.${params.avatar}`);
+
+        this.user = api;
     }
 
-    add(name, info) {
+    add(name, about, avatar) {
         this.name.textContent = name;
-        this.info.textContent = info;
+        this.about.textContent = about;
+        document.querySelector('.spinner').style.display = 'block';
+        this.avatar.src = avatar;
+        this.avatar.onload = () => {
+            this.avatar.hidden = false;
+            document.querySelector('.spinner').style.display = 'none';
+        }
+        
+        console.dir(this.avatar);
     }
 
-    addValue() {
-        formEdit.value(
-            this.name.textContent,
-            this.info.textContent
-        );
+    render() {
+        this.user.getUser()
+            .then(data => {
+                const { name, about, avatar } = data;
+                this.add(name, about, avatar);
+            })
     }
 }
+
+// avatar https://sun9-52.userapi.com/c849324/v849324468/18988f/uVZ8k_SNDDA.jpg
+// Илья Карпов
+// Junior web-developer

@@ -10,6 +10,8 @@
 @import url(../blocks/place-card/place-card.css);
 @import url(../blocks/popup/popup.css);
 @import url(../blocks/popup-image/popup-image.css);
+@import url(../blocks/container/container.css);
+@import url(../blocks/spinner/spinner.css);
 
 body {
   background-color: #000;

@@ -52,11 +52,17 @@ const Events = event => {
     }
 };
 
+const load = () => {
+    cardList.render();
+
+    profile.render();
+};
+
 /*
  * Обработчики событий
  */
 
 // Событие загрузки страницы
-window.addEventListener("load", cardList.render());
+window.addEventListener("load", load);
 // Событие клика
-rootContainer["root container"].addEventListener("click", Events);
+document.addEventListener("click", Events);

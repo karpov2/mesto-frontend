@@ -2,7 +2,7 @@
 class Card {
 	constructor(params) {
 		this.$like = params.isLiked;
-		this.containerParent = params['root container'].querySelector(`.${params.list}`);
+		this.containerParent = document.querySelector(`.${params.list}`);
 		this.containerChild = params.card;
 	}
 

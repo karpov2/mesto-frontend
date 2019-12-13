@@ -2,7 +2,7 @@
 class Popup {
     // Открыть popup
     open(params) {
-        this.popup = params['root container'].querySelector(`.${params.popUp}`);
+        this.popup = document.querySelector(`.${params.popUp}`);
         this.opened = params.open;
 
         this.popup.classList.add(this.opened);

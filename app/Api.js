@@ -22,17 +22,25 @@ class Api {
 
             // если ошибка, переходим в catch
             return Promise.reject(res.status, res.statusText);
-        });
+        })
+        .catch((status, text) => console.log(`Ошибка: ${status} - ${text}`));
     }
 
     // Получить карточки
-    getInitialCards() {
+    getCards() {
         return this.fetch('cards', this.method.get)
             .then(card => {
                 card = card.slice(0, 10);
                 console.table(card);
                 return card;
-            })
-            .catch((status, text) => console.log(`Ошибка: ${status} - ${text}`));
+            });
+    }
+
+    getUser() {
+        return this.fetch('users/me', this.method.get)
+            .then(user => {
+                console.table(user);
+                return user;
+            });
     }
 }
