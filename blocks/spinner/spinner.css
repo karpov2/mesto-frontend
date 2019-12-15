@@ -12,6 +12,7 @@
 
 .spinner i::after {
     position: absolute;
+    z-index: 5;
     top: calc(50% - 1em/2);
     left: calc(50% - 1em/2);
     clip: rect(0, 1em, 1em, 0.5em);

@@ -1,25 +1,31 @@
 class Form extends Popup {
-    constructor(params) {
+    constructor() {
         super();
+        // Сохранение контекста класса Form для метода add
+        this._add = this.add.bind(this);
+        this._valid = this.valid.bind(this);
+    }
+
+    // Изменяемые данные для каждой формы
+    formData(params, validation, classContent) {
         // Элементы формы
         this.form = document.forms[params.form];
         this.name = this.form.elements.name;
         this.info = this.form.elements.info;
         this.submit = this.form.elements.submit;
-
         // Добавление контента на страницу
-        this.addContent = params.addContent;
-
-        // Сохранение контекста класса Form для метода add
-        this._add = this.add.bind(this);
+        this.addContent = classContent;
+        // Класс валидации
+        this.validation = validation;
     }
 
     // Добавление обработчиков событий
     setAddEventListener() {
         this.form.addEventListener(
             'input',
-            this._form
+            this._valid
         );
+
         this.form.addEventListener(
             'submit',
             this._add
@@ -32,21 +38,23 @@ class Form extends Popup {
             'input',
             validation.check
         );
+
         this.form.removeEventListener(
             'submit',
             this._add
         );
     }
 
-    _form() {
-        validation.check(this);
+    valid() {
+        // console.log(this);
+        this.validation.check(this.form);
     }
 
     add() {
         event.preventDefault();
-
-        this.addContent.add(this.name.value, this.info.value);
-        
+        // this.addContent.add(this.name.value, this.info.value);
+        // this.addContent.add(this.name.value, this.info.value);
+        this.addContent.get(this.name.value, this.info.value);
         this.reset();
     }
 

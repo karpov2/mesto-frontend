@@ -4,22 +4,24 @@
 
 //  Подключение API
 const api = new Api(connectionApi);
-
+// Предварительная загрузка
+const preloading = new Preloading(htmlPreloading);
 // Работа с карточкой 
 const card = new Card(htmlCard);
 // Список карточек
 // Загрузка карточек при загрузки страницы
-const cardList = new CardList(htmlListCard, api, card);
+const cardList = new CardList(htmlListCard, api, card, preloading);
 // увеличение фото
 const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
-// Форма редактирования профиля
-const formEdit = new Form(htmlPopUpEdit);
-// Форма для добавления нового места
-const formAdd = new Form(htmlPopUpAdd);
 // Валидация формы
 const validation = new Validation(htmlForm);
-
-const profile = new Profile(userProfile, api);
+// Форма редактирования профиля
+// const formEdit = new Form(htmlPopUpEdit, validation);
+const form = new Form();
+// Форма для добавления нового места
+// const formAdd = new Form(htmlPopUpAdd);
+// Профиль
+const profile = new Profile(userProfile, api, preloading);
 
 /*
 

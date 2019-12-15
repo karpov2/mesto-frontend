@@ -13,6 +13,7 @@ const htmlCard = {
     image: "place-card__image", // Изображение
     like: "place-card__like-icon", // Лайк
     isLiked: "place-card__like-icon_liked", // Активный лайк
+    counterLikes: "place-card__like-counter", // Счетчик лайков
     remove: "place-card__delete-icon", // Кнопка удаление
     card: "place-card", // Родительский контейнер
     ...htmlListCard
@@ -51,7 +52,7 @@ const userProfile = {
 
 // Классы html разметки «Редактирование профиля»
 const htmlPopUpEdit = {
-	// addContent: new Profile(userProfile),
+	// addContent: profile,
     form: "formProfile",
     button: "user-info__edit", // Кнопка открытия формы
     popUp: "popup_edit-profile", // Родительский контейнер
@@ -61,7 +62,7 @@ const htmlPopUpEdit = {
 
 // Классы html разметки «Новое место»
 const htmlPopUpAdd = {
-    addContent: new CardList(htmlListCard),
+    // addContent: cardList,
     form: "formCards",
     button: "user-info__add", // Кнопка открытия формы
     popUp: "popup_add-item", // Родительский контейнер
@@ -76,6 +77,9 @@ const htmlPopUpPhoto = {
     ...htmlPopUp
 };
 
+// 'cards'
+// 'users/me'
+
 const connectionApi = {
     url: 'http://95.216.175.5',
     group: 'cohort6',
@@ -89,5 +93,10 @@ const connectionApi = {
     headers: {
         token: '168a5e64-116b-4823-bcb6-e65bb6a0c4f2',
         type: 'application/json'
-        }
+    }
+};
+
+const htmlPreloading = {
+    container: 'spinner',
+    visible: 'spinner_visible'
 };

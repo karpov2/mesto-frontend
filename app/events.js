@@ -29,32 +29,36 @@ const Events = event => {
 
     // Открываем popup форму «Редактирование профиля»
     if (event.target.classList.contains(htmlPopUpEdit.button)) {
-        htmlPopUpEdit.addContent.addValue();
-        formEdit.open(htmlPopUpEdit);
-        validation.check(formEdit.form);
-        formEdit.setAddEventListener();
+        form.formData(htmlPopUpEdit, validation, profile);
+        form.value(
+            profile.name.textContent,
+            profile.about.textContent
+        );
+        form.open(htmlPopUpEdit);
+        form.validation.check(form.form);
+        form.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpEdit.close) &&
         event.target.closest(`.${htmlPopUpEdit.popUp}`)
     ) {
-        formEdit.reset();
+        form.reset();
     }
 
     // Открываем popup форму «Новое место»
     if (event.target.classList.contains(htmlPopUpAdd.button)) {
-        formAdd.open(htmlPopUpAdd);
-        formAdd.setAddEventListener();
+        form.formData(htmlPopUpAdd, validation, cardList);
+        form.open(htmlPopUpAdd);
+        form.setAddEventListener();
     } else if (
         event.target.classList.contains(htmlPopUpAdd.close) &&
         event.target.closest(`.${htmlPopUpAdd.popUp}`)
     ) {
-        formAdd.reset();
+        form.reset();
     }
 };
 
 const load = () => {
     cardList.render();
-
     profile.render();
 };
 

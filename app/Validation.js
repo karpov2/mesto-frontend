@@ -1,9 +1,5 @@
 class Validation {
     constructor(params) {
-        this.name = null;
-        this.info = null;
-        this.submit = null;
-
         // Подключаемся к полям вывода текста ошибок
         this.errorContainerName = params.error.container.name;
         this.errorContainerInfo = params.error.container.info;
@@ -14,18 +10,20 @@ class Validation {
         this.typeMismatch = params.error.text.typeMismatch;
     }
 
-    check(form) {
+    check(classForm) {
         // Подключаемся к полям вывода текста ошибок
-        this.errorName = form.querySelector(
+        // console.log(this);
+        // console.dir(classForm);
+        this.errorName = classForm.querySelector(
             `.${this.errorContainerName}`
         );
-        this.errorInfo = form.querySelector(
+        this.errorInfo = classForm.querySelector(
             `.${this.errorContainerInfo}`
         );
 
-        this.name = form.elements.name;
-        this.info = form.elements.info;
-        this.submit = form.elements.submit;
+        this.name = classForm.elements.name;
+        this.info = classForm.elements.info;
+        this.submit = classForm.elements.submit;
 
         this.checkName(this.name, this.errorName);
         this.checkInfo(this.info, this.errorInfo);
