@@ -7,14 +7,19 @@ class Api {
     }
 
     // Подключение к серверу
-    fetch(url, method, body) {
-        return fetch(`${this.url}/${this.group}/${url}`, {
-            method: method,
+    fetch(params) {
+        const _url = params.url;
+        const _method = params.method;
+        const _body = params.body;
+        const _id = params._id;
+
+        return fetch(`${this.url}/${this.group}/${_url}/${_id || ''}`, {
+            method: _method,
             headers: {
                 authorization: this.headers.token,
                 'Content-Type': this.headers.type,
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(_body)
         })
         .then(res => {
             if(res.ok) {
@@ -28,56 +33,53 @@ class Api {
 
     // Загрузка первоначальных карточек с сервера
     getCards() {
-        return this.fetch('cards', this.method.get)
-            .then(card => {
-                let data = [];
-                card.filter(item => {
-                    if (item.owner.name === 'Илья Карпов' ||
-                        item.owner._id === '52edaf937c24d358ab22d3e0') {
-                        
-                        data.unshift(item);
-                    }
-                    if (data.length < 9) {
-                        data.push(item);
-                    }
-                    return data;
-                })
-
-                let test = [];
-                const result = card.reduce((value, item) => {
-                    // console.log(item.owner.name);
-                    if (!value[item.owner.name]) {
-                    // если ключа ещё нет в объекте, значит это первое повторение
-                        value[item.owner.name] = 1;
-                    } else {
-                    // иначе увеличим количество повторений на 1
-                        value[item.owner.name] += 1;
-                    }
-                
-                    // и вернём изменённый объект
-                    return value;
-                }, {});
-                console.table(result);
-
-                return data;
-            });
+        return this.fetch({
+            url: 'cards', 
+            method: this.method.get
+        });
     }
 
     // Добавление новой карточки
     postCards(body) {
-        return this.fetch('cards', this.method.post, body);
+        return this.fetch({
+            url: 'cards', 
+            method: this.method.post, 
+            body: body
+        });
     }
 
     // Загрузка информации о пользователе с сервера
     getUser() {
-        return this.fetch('users/me', this.method.get)
-            .then(user => {
-                return user;
-            });
+        return this.fetch({
+            url: 'users/me', 
+            method: this.method.get
+        });
     }
 
     // Редактирование профиля
     patchUser(body) {
-        return this.fetch('users/me', this.method.patch, body);
+        return this.fetch({
+            url: 'users/me', 
+            method: this.method.patch, 
+            body: body
+        });
+    }
+
+    // Удаление карточки
+    deleteCards(id) {
+        return this.fetch({
+            url: 'cards', 
+            method: this.method.delete, 
+            _id: id
+        });
+    }
+
+    // Постановка и снятие лайка
+    likeCards(method, id) {
+        return this.fetch({
+            url: 'cards/like', 
+            method: this.method[method], 
+            _id: id
+        });
     }
 }

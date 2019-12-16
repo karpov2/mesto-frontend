@@ -52,8 +52,6 @@ class Form extends Popup {
 
     add() {
         event.preventDefault();
-        // this.addContent.add(this.name.value, this.info.value);
-        // this.addContent.add(this.name.value, this.info.value);
         this.addContent.get(this.name.value, this.info.value);
         this.reset();
     }

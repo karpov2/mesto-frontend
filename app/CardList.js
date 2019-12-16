@@ -3,61 +3,58 @@ class CardList {
 	// Метод constructor этого класса должен принимать два параметра:
 	// DOM-элемент — контейнер, куда нужно складывать карточки;
 	// Массив карточек, которые будут на странице при загрузке.
-	constructor(dom, api, classCard, preloading) {
+	constructor(dom, api, classCard, user) {
 		this.container = document.querySelector(`.${dom.list}`);
 		// Можно лучше: Имя card не отражает сущности хранимых данных
-		this.cards = api;
+		this.api = api;
 		this.card = classCard;
-		this.preloading = preloading;
+		this.userId = user;
 	}
 
 	get(name, link) {
-		this.cards.postCards({
+		this.api.postCards({
 			name: name,
 			link: link
 		})
 		.then(post => {
-			const { name, link } = post;
-			this.add(name, link);
+			console.table(post);
+			const { name, link, likes, _id, owner } = post;
+			this.add(name, link, likes, _id, owner);
 		});
 	}
 
 	// addCard для добавления карточки в список
-	add(name, link, likes, _id) {
+	add(name, link, likes, _id, owner) {
 		this.container.insertAdjacentHTML(
-			'beforeend', 
-			this.card.create(name, link, likes)
+			'afterbegin', 
+			this.card.create(name, link, likes, _id, owner._id === this.userId._id)
 		);
-
-		this.load();
-	}
-
-	// Загрузка картинок после загрузки
-	load() {
-		let counter = document.querySelectorAll(`.${this.card.containerChild}`).length - 1;
-
-		// <div class="place-card"></div>
-		const card = document.querySelectorAll(`.${this.card.containerChild}`)[counter];
-		// <img class="place-card__image" src="">
-		const image = document.querySelectorAll(`.${this.card.image}`)[counter];
 		
-		this.preloading.load(card);
-
-		image.onload = () => {
-			this.preloading.load(card);
-			image.hidden = false;
-		}
+		this.card.load();
 	}
 
 	// render для отрисовки карточек при загрузке страницы
 	render() {
-		this.cards.getCards()
-			.then(data => {
+		this.api.getCards()
+			.then(cards => {
+				const data = cards.reduce((value, item) => {
+                    
+                    if (item.owner._id === this.userId._id) {
+                        value.push(item);
+                    }
+
+                    if (value.length < 9) {
+                        value.unshift(item);
+                    }
+
+                    return value;
+                }, []);
 				console.table(data);
+				
 				data.forEach(item => {
-					const { name, link, likes, _id } = item;
+					const { name, link, likes, _id, owner } = item;
 					// В блок placesList добавляем создданный div placeCard
-					this.add(name, link, likes, _id);
+					this.add(name, link, likes, _id, owner);
 				});
 			});
 	}

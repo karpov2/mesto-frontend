@@ -7,10 +7,10 @@ const api = new Api(connectionApi);
 // Предварительная загрузка
 const preloading = new Preloading(htmlPreloading);
 // Работа с карточкой 
-const card = new Card(htmlCard);
+const card = new Card(htmlCard, api, preloading);
 // Список карточек
 // Загрузка карточек при загрузки страницы
-const cardList = new CardList(htmlListCard, api, card, preloading);
+const cardList = new CardList(htmlListCard, api, card, user);
 // увеличение фото
 const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
 // Валидация формы
