@@ -24,13 +24,20 @@ class CardList {
 	}
 
 	// addCard для добавления карточки в список
-	add(name, link, likes, _id, owner) {
+	add(name, link, likes, id, owner) {
 		this.container.insertAdjacentHTML(
 			'afterbegin', 
-			this.card.create(name, link, likes, _id, owner._id === this.userId._id)
+			this.card.create({
+				name, 
+				link, 
+				likes, 
+				id, 
+				owner: owner._id === this.userId._id
+			})
 		);
 		
 		this.card.load();
+		this.card.checkLike({likes, userId: this.userId});
 	}
 
 	// render для отрисовки карточек при загрузке страницы
@@ -49,7 +56,7 @@ class CardList {
 
                     return value;
                 }, []);
-				console.table(data);
+				// console.table(data);
 				
 				data.forEach(item => {
 					const { name, link, likes, _id, owner } = item;
