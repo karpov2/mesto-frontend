@@ -36,8 +36,6 @@ class Card {
 		});
 	}
 
-	// https://cdn.oboi7.com/99f1da545c810446ee53c05d46e695a02a0d6dda/pejzazhi-priroda-hdr-fotografii.jpg
-
 	// Удаление карточки
 	remove() {
 		// <button class="place-card__delete-icon">
@@ -63,8 +61,8 @@ class Card {
 		const _link = params.link;
 		const _likes = params.likes;
 		const _id = params.id;
-		const _userId = params.userId;
-		
+		const _userId = params.owner;
+
 		// Выводим список карточек
 		return `
 		<div class="place-card" id-card="${_id}">
@@ -103,6 +101,3 @@ class Card {
 		};
 	}
 }
-
-// <img class="place-card__image" src="${link}">
-// <div class="place-card__image" style="background-image: url(${link})"></div>

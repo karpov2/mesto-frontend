@@ -41,7 +41,6 @@ class Validation {
         }
     }
 
-    // Нужно исправить: Удалите неиспользуемый метод
     error(input, error) {
         if (input.validity.valueMissing) {
             error.textContent = this.valueMissing;
