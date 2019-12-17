@@ -12,8 +12,6 @@ class Validation {
 
     check(classForm) {
         // Подключаемся к полям вывода текста ошибок
-        // console.log(this);
-        // console.dir(classForm);
         this.errorName = classForm.querySelector(
             `.${this.errorContainerName}`
         );
@@ -47,13 +45,17 @@ class Validation {
     error(input, error) {
         if (input.validity.valueMissing) {
             error.textContent = this.valueMissing;
-        } else if (input.validity.tooShort) {
-            error.textContent = this.tooShort;
-        } else if (input.validity.typeMismatch) {
-            error.textContent = this.typeMismatch;
-        } else {
-            error.textContent = null;
+            return;
         }
+        if (input.validity.tooShort) {
+            error.textContent = this.tooShort;
+            return;
+        }
+        if (input.validity.typeMismatch) {
+            error.textContent = this.typeMismatch;
+            return;
+        }
+        error.textContent = null;
     }
 
     valid(name, info, submit) {
