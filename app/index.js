@@ -2,24 +2,20 @@
  * Подключение модулей
  */
 
-//  Подключение API
+// Подключение API
 const api = new Api(connectionApi);
 // Предварительная загрузка
 const preloading = new Preloading(htmlPreloading);
 // Работа с карточкой 
 const card = new Card(htmlCard, api, preloading);
-// Список карточек
 // Загрузка карточек при загрузки страницы
 const cardList = new CardList(htmlListCard, api, card, user);
 // увеличение фото
 const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
 // Валидация формы
 const validation = new Validation(htmlForm);
-// Форма редактирования профиля
-// const formEdit = new Form(htmlPopUpEdit, validation);
+// Форма
 const form = new Form();
-// Форма для добавления нового места
-// const formAdd = new Form(htmlPopUpAdd);
 // Профиль
 const profile = new Profile(userProfile, api, preloading);
 
