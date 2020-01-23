@@ -85,7 +85,7 @@ const htmlPopUpPhoto = {
 // 'users/me'
 
 const connectionApi = {
-    url: 'https://95.216.175.5',
+    url: 'http://95.216.175.5',
     group: 'cohort6',
     method: {
         get: 'GET',
