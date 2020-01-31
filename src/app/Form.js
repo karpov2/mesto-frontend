@@ -1,4 +1,6 @@
-class Form extends Popup {
+import {Popup} from './Popup.js';
+
+export class Form extends Popup {
     constructor() {
         super();
         // Сохранение контекста класса Form для метода add

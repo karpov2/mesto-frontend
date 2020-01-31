@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mesto</title>
-    <link rel="stylesheet" href="./pages/index.css">
+    <link rel="stylesheet" href="<%=htmlWebpackPlugin.files.chunks.main.css %>">
 </head>
 
 <body>
     <div class="root">
 
         <header class="header root__section">
-            <img src="./images/logo.svg" alt="mesto logo" class="logo">
+            <!-- <%=require('./images/logo.svg')%> -->
+            <img src="<%=require('./images/logo.svg')%>" alt="mesto logo" class="logo">
         </header>
 
         <div class="profile root__section">
@@ -33,7 +34,7 @@
             <!-- Добавление новойкарточки -->
             <div class="popup popup_add-item">
                 <div class="popup__content">
-                    <img src="./images/close.svg" alt="" class="popup__close">
+                    <img src="<%=require('./images/close.svg')%>" alt="" class="popup__close">
                     <h3 class="popup__title">Новое место</h3>
                     <form class="popup__form" name="formCards">
                         <input type="text" name="name" class="popup__input popup__input_type_name"
@@ -51,7 +52,7 @@
             <!-- Редактирование профиля -->
             <div class="popup popup_edit-profile">
                 <div class="popup__content">
-                    <img src="./images/close.svg" alt="" class="popup__close">
+                    <img src="<%=require('./images/close.svg')%>" alt="" class="popup__close">
                     <h3 class="popup__title">Редактировать профиль</h3>
                     <form class="popup__form" name="formProfile">
                         <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя"
@@ -73,7 +74,7 @@
             <!-- Всплывающее фото карточки -->
             <div class="popup popup-image">
                 <div class="popup-image__content">
-                    <img src="./images/close.svg" alt="" class="popup__close">
+                    <img src="<%=require('./images/close.svg')%>" alt="" class="popup__close">
                     <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt=""
                         class="popup-image__img">
                 </div>
@@ -84,7 +85,8 @@
     </div>
 
     <!-- Подключение js файла -->
-    <script src="./app/Api.js"></script>
+    <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+    <!-- <script src="./app/Api.js"></script>
     <script src="./app/Preloading.js"></script>
     <script src="./app/Card.js"></script>
     <script src="./app/CardList.js"></script>
@@ -95,7 +97,7 @@
     <script src="./app/Profile.js"></script>
     <script src="./app/DOM.js"></script>
     <script src="./app/index.js"></script>
-    <script src="./app/events.js"></script>
+    <script src="./app/events.js"></script> -->
 </body>
 
 </html>
