@@ -1,5 +1,5 @@
 // Это класс, создающий карточку
-export class Card {
+class Card {
 	constructor(params, api, preloading) {
 		this.containerParent = document.querySelector(`.${params.list}`);
 		this.card = params;

@@ -1,4 +1,4 @@
-export class Preloading {
+class Preloading {
     constructor(dom) {
         this.visible = dom.visible;
     }

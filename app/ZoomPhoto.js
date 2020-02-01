@@ -1,7 +1,5 @@
-import {Popup} from './Popup.js';
-
 // Увеличение фотографии карточки
-export class ZoomPhoto extends Popup {
+class ZoomPhoto extends Popup {
     constructor(params) {
         super();
         this.param = params;

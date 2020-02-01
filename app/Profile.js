@@ -1,4 +1,4 @@
-export class Profile {
+class Profile {
     constructor(profile, api, preloading) {
         // Профиль: "Имя" и "О себе"
         this.name = document.querySelector(`.${profile.name}`);

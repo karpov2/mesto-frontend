@@ -104,5 +104,3 @@ const htmlPreloading = {
     container: 'spinner',
     visible: 'spinner_visible'
 };
-
-export {htmlListCard, user, htmlCard, htmlForm, htmlPopUp, userProfile, htmlPopUpEdit, htmlPopUpAdd, htmlPopUpPhoto, connectionApi, htmlPreloading};
