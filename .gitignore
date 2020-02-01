@@ -1,7 +1,6 @@
 /*
 /src
-/dist/*
-!dist/**
+!/dist
 !.nojekyll
 !.gitignore
 node_modules
