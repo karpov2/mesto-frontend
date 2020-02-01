@@ -1,4 +1,5 @@
 import {Popup} from './Popup.js';
+import * as index from './index.js';
 
 export class Form extends Popup {
     constructor() {
@@ -38,7 +39,7 @@ export class Form extends Popup {
     removeAddEventListener() {
         this.form.removeEventListener(
             'input',
-            validation.check
+            index.validation.check
         );
 
         this.form.removeEventListener(

@@ -11,7 +11,7 @@ export class ZoomPhoto extends Popup {
     // Открыть фото
     add() {
         // Подставить конкретное фото
-        this.img.src = event.target.style.backgroundImage.slice(5, -2);
+        this.img.src = event.target.src;
         this.img.onload = () => this.open(this.param);
     }
 

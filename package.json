@@ -4,12 +4,13 @@
 	"description": "",
 	"main": "script.js",
 	"scripts": {
-		"build": "NODE_ENV=production rimraf dist && webpack --mode production",
-        "dev": "NODE_ENV=development webpack-dev-server --mode development --open --watch"
+		"build": "cross-env NODE_ENV=production rimraf dist && webpack --mode production",
+		"dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open --watch",
+		"deploy": "cross-env NODE_ENV=production gh-pages -d dist"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/karpov2/Mesto.git"
+		"url": "ssh+git@github.com:karpov2/Mesto.git"
 	},
 	"keywords": [
 		"mesto"
@@ -19,7 +20,7 @@
 	"bugs": {
 		"url": "https://github.com/karpov2/Mesto/issues"
 	},
-	"homepage": "https://github.com/karpov2/Mesto#readme",
+	"homepage": "https://github.com/karpov2/Mesto",
 	"devDependencies": {
 		"@babel/cli": "^7.8.3",
 		"@babel/core": "^7.8.3",
