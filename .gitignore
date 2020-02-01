@@ -1,6 +1,13 @@
 /*
 /src
-!/dist
+/dist
+
 !.nojekyll
 !.gitignore
 node_modules
+
+!/images
+!/vendor
+!/*.html
+!/*.css
+!/*.js
