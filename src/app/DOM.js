@@ -85,7 +85,7 @@ const htmlPopUpPhoto = {
 // 'users/me'
 
 const connectionApi = {
-    url: NODE_ENV === "development"?'http://95.216.175.5':'https://95.216.175.5',
+    url: NODE_ENV === "development"?'http://praktikum.tk':'https://praktikum.tk',
     group: 'cohort6',
     method: {
         get: 'GET',
