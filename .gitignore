@@ -1,6 +1,8 @@
 /*
 /src
-!/dist
+/dist
+!/images
+!/vendor
 !.nojekyll
 !.gitignore
 node_modules
