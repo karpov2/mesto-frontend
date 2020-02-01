@@ -1,3 +1,6 @@
+import * as dom from './DOM.js';
+import * as index from './index.js';
+
 /*
  * Объявление событий
  */
@@ -58,8 +61,9 @@ const Events = event => {
 };
 
 const load = () => {
-    cardList.render();
-    profile.render();
+    console.dir(index);
+    index.cardList.render();
+    index.profile.render();
 };
 
 /*
@@ -70,3 +74,5 @@ const load = () => {
 window.addEventListener("load", load);
 // Событие клика
 document.addEventListener("click", Events);
+
+export {Events, load};

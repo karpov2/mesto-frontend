@@ -1,4 +1,4 @@
-class Validation {
+export class Validation {
     constructor(params) {
         // Подключаемся к полям вывода текста ошибок
         this.errorContainerName = params.error.container.name;
