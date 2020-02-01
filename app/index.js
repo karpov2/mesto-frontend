@@ -20,11 +20,9 @@ const form = new Form();
 const profile = new Profile(userProfile, api, preloading);
 
 /*
-
 Привет! Для 9 проектной работы тебе понадобится дополнительная информация. Вот она.
 Токен: 168a5e64-116b-4823-bcb6-e65bb6a0c4f2
 Идентификатор группы: cohort6
-
 */
 
 /**
