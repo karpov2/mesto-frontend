@@ -36,8 +36,11 @@ module.exports = {
                 test: /\.(png|jpg|gif|ico|svg)$/,
                 use: [
                     {
-                        loader: 'file-loader?name=./images/[name].[ext]', // указали папку, куда складывать изображения
-                        options: {esModule: false}
+                        loader: 'file-loader',
+                        options: {
+                            name: './images/[name].[ext]', // указали папку, куда складывать изображения
+                            esModule: false
+                        }
                     },
                     {
                         loader: 'image-webpack-loader',
@@ -49,13 +52,24 @@ module.exports = {
             // Настройка для подгрузки шрифтов
             {
                 test: /\.(eot|ttf|woff|woff2)$/,
-                loader: 'file-loader?name=./vendor/[name].[ext]'
+                loader: 'file-loader',
+                options: {
+                    name: './vendor/[name].[ext]', // указали папку, куда складывать шрифты
+                }
             }
         ]
     },
 
     plugins: [ 
         new MiniCssExtractPlugin({filename: 'style.[contenthash].css'}),
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: require('cssnano'),
+            cssProcessorPluginOptions: {
+                    preset: ['default'],
+            },
+            canPrint: true
+        }), // подключите плагин после MiniCssExtractPlugin
         new HtmlWebpackPlugin({
             // Означает, что:
             inject: false, // стили НЕ нужно прописывать внутри тегов
@@ -65,14 +79,6 @@ module.exports = {
         new WebpackMd5Hash(),
         new webpack.DefinePlugin({
             'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        new OptimizeCssAssetsPlugin({
-            assetNameRegExp: /\.css$/g,
-            cssProcessor: require('cssnano'),
-            cssProcessorPluginOptions: {
-                    preset: ['default'],
-            },
-            canPrint: true
-        }) // подключите плагин после MiniCssExtractPlugin
+        })
     ]
 };
