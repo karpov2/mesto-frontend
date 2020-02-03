@@ -8,5 +8,5 @@ node_modules
 !/images
 !/vendor
 !/*.html
-!/*.css
-!/*.js
+!/style*.css
+!/main*.js
