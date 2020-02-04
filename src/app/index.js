@@ -2,22 +2,44 @@
  * Подключение модулей
  */
 
+import '../pages/style.css';
+import * as dom from './DOM.js';
+import {Api} from './Api.js';
+import {Preloading} from './Preloading.js';
+import {Card} from './Card.js';
+import {CardList} from './CardList.js';
+import {Popup} from './Popup.js';
+import * as events from './events.js';
+import {ZoomPhoto} from './ZoomPhoto.js';
+import {Form} from './Form.js';
+import {Validation} from './Validation.js';
+import {Profile} from './Profile.js';
+
 // Подключение API
-const api = new Api(connectionApi);
+const api = new Api(dom.connectionApi);
 // Предварительная загрузка
-const preloading = new Preloading(htmlPreloading);
+const preloading = new Preloading(dom.htmlPreloading);
 // Работа с карточкой 
-const card = new Card(htmlCard, api, preloading);
+const card = new Card(dom.htmlCard, api, preloading);
 // Загрузка карточек при загрузки страницы
-const cardList = new CardList(htmlListCard, api, card, user);
+const cardList = new CardList(dom.htmlListCard, api, card, dom.user);
 // увеличение фото
-const zoomPhoto = new ZoomPhoto(htmlPopUpPhoto);
+const zoomPhoto = new ZoomPhoto(dom.htmlPopUpPhoto);
 // Валидация формы
-const validation = new Validation(htmlForm);
+const validation = new Validation(dom.htmlForm);
 // Форма
 const form = new Form();
 // Профиль
-const profile = new Profile(userProfile, api, preloading);
+const profile = new Profile(dom.userProfile, api, preloading);
+
+export {api, preloading, card, cardList, zoomPhoto, validation, form, profile};
+
+
+
+
+
+
+
 
 /*
 Привет! Для 9 проектной работы тебе понадобится дополнительная информация. Вот она.

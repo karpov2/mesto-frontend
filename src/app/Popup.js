@@ -1,5 +1,5 @@
 // Это класс для всплывающего окна
-class Popup {
+export class Popup {
     // Открыть popup
     open(params) {
         this.popup = document.querySelector(`.${params.popUp}`);

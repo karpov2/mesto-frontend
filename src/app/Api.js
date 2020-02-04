@@ -1,4 +1,4 @@
-class Api {
+export class Api {
     constructor(config) {
         this.url = config.url;
         this.group = config.group;

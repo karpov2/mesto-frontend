@@ -85,7 +85,7 @@ const htmlPopUpPhoto = {
 // 'users/me'
 
 const connectionApi = {
-    url: 'http://95.216.175.5',
+    url: NODE_ENV === "development"?'http://praktikum.tk':'https://praktikum.tk',
     group: 'cohort6',
     method: {
         get: 'GET',
@@ -104,3 +104,5 @@ const htmlPreloading = {
     container: 'spinner',
     visible: 'spinner_visible'
 };
+
+export {htmlListCard, user, htmlCard, htmlForm, htmlPopUp, userProfile, htmlPopUpEdit, htmlPopUpAdd, htmlPopUpPhoto, connectionApi, htmlPreloading};
