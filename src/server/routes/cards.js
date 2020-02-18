@@ -1,13 +1,6 @@
-const fs = require('fs');
 const path = require('path');
+const usersFile = require(path.join(__dirname, '../data/cards.json'));
 
-const cards = (req, res) => {
-    fs.readFile(path.join(__dirname, '../data/cards.json'),
-        'utf8', (err, data) => {
-        if (err) return console.log('test error', err);
-
-        res.set('Content-Type', 'application/json').end(data);
-    });
-};
+const cards = (req, res) => res.send(usersFile);
 
 module.exports = cards;
