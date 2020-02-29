@@ -11,7 +11,7 @@
 		"dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open --watch",
 		"deploy": "cross-env NODE_ENV=production gh-pages -d dist",
 		"start": "node src/server/node",
-        "dev:server": "nodemon src/server/node"
+		"dev:server": "nodemon src/server/node"
 	},
 	"repository": {
 		"type": "git",
@@ -54,7 +54,9 @@
 	},
 	"dependencies": {
 		"babel-polyfill": "^6.26.0",
+		"body-parser": "^1.19.0",
 		"core-js": "^3.4.1",
-		"express": "latest"
+		"express": "latest",
+		"mongoose": "^5.9.2"
 	}
 }
