@@ -59,6 +59,7 @@ npm run deploy
 
 ```
 npm run dev:server
+
 ```
 
 ## Функционал сервера
