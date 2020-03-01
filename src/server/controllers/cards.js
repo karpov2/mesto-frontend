@@ -11,7 +11,7 @@ const cardsGet = (req, res) => {
 const cardPost = (req, res) => {
     const {name, link} = req.body;
 
-    Card.create({name, link, owner: req.user._id})
+    Card.create({name, link, owner: req.user._id}, { runValidators: true })
         .then(card => res.send(card))
         .catch(err => res.status(500).send({ message: 'Произошла ошибка в создании новой карточки', error: err }));
 };
