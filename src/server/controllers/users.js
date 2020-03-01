@@ -16,7 +16,10 @@ const userGet = (req, res) => {
 
 // обновляет профиль
 const userProfilePatch = (req, res) => {
-    User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true })
+    const {name, avatar} = req.body;
+    const data = avatar ? {name, avatar} : {name};
+
+    User.findByIdAndUpdate(req.user._id, data, { runValidators: true, new: true })
         .then(user => res.send(user))
         .catch(err => res.status(500).send({ message: 'Произошла ошибка в обновлении информации пользователя', error: err }));
 };
@@ -25,7 +28,7 @@ const userProfilePatch = (req, res) => {
 const userProfileAvatarPatch = (req, res) => {
     const {avatar} = req.body;
 
-    User.findByIdAndUpdate(req.user._id, {avatar: avatar}, { runValidators: true, new: true })
+    User.findByIdAndUpdate(req.user._id, {avatar}, { runValidators: true, new: true })
         .then(user => res.send(user))
         .catch(err => res.status(500).send({ message: 'Произошла ошибка в обновлении аватарки пользователя', error: err }));
 };
