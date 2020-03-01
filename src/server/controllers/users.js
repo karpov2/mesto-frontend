@@ -16,9 +16,7 @@ const userGet = (req, res) => {
 
 // обновляет профиль
 const userProfilePatch = (req, res) => {
-    const {name} = req.body;
-
-    User.findByIdAndUpdate(req.user._id, {name: name}, { runValidators: true, new: true })
+    User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true })
         .then(user => res.send(user))
         .catch(err => res.status(500).send({ message: 'Произошла ошибка в обновлении информации пользователя', error: err }));
 };
