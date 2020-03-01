@@ -1,9 +1,6 @@
 const error = (error, req, res, next) => {
-    if (error instanceof SyntaxError) {
-        return res.status(400).json({
-            message: 'Invalid Json Body',
-            error
-        });
+    if (error) {
+        return res.status(400).json(error);
     }
     next();
 };
