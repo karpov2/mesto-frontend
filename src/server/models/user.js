@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: { // ссылка на аватарку
         type: String,
-        required: true,
+        required: [true, 'Ссылка на картинку обязательна'],
         validate: {
             validator: (link) => {
                 return /^https?:\/\/\S+(?:jpg|jpeg|png)$/.test(link);
