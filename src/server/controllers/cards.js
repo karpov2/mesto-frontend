@@ -9,17 +9,10 @@ const cardsGet = (req, res) => {
 
 // создаёт карточку
 const cardPost = (req, res) => {
-    console.log('555555555=======');
-    try {
-        const {name, link} = req.body;
-        console.log('try');
-        Card.create({name, link, owner: req.user._id}, { runValidators: true })
-            .then(card => res.send(card))
-            .catch(err => res.status(500).send({ message: 'Произошла ошибка в создании новой карточки', error: err }));
-    } catch (e) {
-        console.log('catch');
-        res.status(500).send({ message: 'Произошла ошибка в создании новой карточки', error: e })
-    }
+    const {name, link} = req.body;
+    Card.create({name, link, owner: req.user._id}, { runValidators: true })
+        .then(card => res.send(card))
+        .catch(err => res.status(500).send({ message: 'Произошла ошибка в создании новой карточки', error: err }));
 };
 
 // удаляет карточку по идентификатору
