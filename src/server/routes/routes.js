@@ -1,11 +1,12 @@
 const router = require('express').Router(); // Создали роутер
 const {cardsGet, cardPost, cardDelete} = require('../controllers/cards');
-const {usersGet, userGet, userPost, userProfilePatch} = require('../controllers/users');
+const {usersGet, userGet, userPost, userProfilePatch, userProfileAvatarPatch} = require('../controllers/users');
 const errorPage = require('../controllers/error');
 
-router.use('/users', usersGet); // возвращает всех пользователей
+router.get('/users', usersGet); // возвращает всех пользователей
 router.get('/users/:userId', userGet); // возвращает пользователя по _id
 router.patch('/users/me', userProfilePatch); // обновляет профиль
+router.patch('/users/me/avatar', userProfileAvatarPatch); // обновляет аватар
 router.post('/users', userPost); // создаёт пользователя
 
 router.get('/cards', cardsGet); // возвращает все карточки

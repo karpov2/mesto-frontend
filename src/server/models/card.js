@@ -9,7 +9,13 @@ const cardSchema = new mongoose.Schema({
     },
     link: { // ссылка на картинку
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: (link) => {
+                return /^https?:\/\/\S+(?:jpg|jpeg|png)$/.test(link);
+            },
+            message: props => `${props.value} не правильно указана ссылка на картинку`
+        }
     },
     owner: { // ссылка на модель автора карточки
         type: mongoose.Schema.Types.ObjectId,

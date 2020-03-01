@@ -15,7 +15,13 @@ const userSchema = new mongoose.Schema({
     },
     avatar: { // ссылка на аватарку
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: (link) => {
+                return /^https?:\/\/\S+(?:jpg|jpeg|png)$/.test(link);
+            },
+            message: props => `${props.value} не правильно указана ссылка на картинку`
+        }
     }
 });
 
